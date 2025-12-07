@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.3094, 18.3291]
+      },
+      "properties": {
+        "name": "Flamenco Beach",
+        "category": "beach",
+        "description": "One of the most beautiful beaches in the world"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.2283, 18.3133]
+      },
+      "properties": {
+        "name": "Culebrita Lighthouse",
+        "category": "hike",
+        "description": "Abandoned lighthouse with epic panoramic views"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.315, 18.315]
+      },
+      "properties": {
+        "name": "Playa Tamarindo",
+        "category": "snorkeling",
+        "description": "Amazing coral reef and sea turtles"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.265, 18.345]
+      },
+      "properties": {
+        "name": "Playa Zoni",
+        "category": "beach",
+        "description": "Quiet paradise, perfect for sunrise"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-65.335, 18.285]
+      },
+      "properties": {
+        "name": "Punta Soldado",
+        "category": "snorkeling",
+        "description": "Crystal clear water and colorful fish"
+      }
+    }
+  ]
+}
