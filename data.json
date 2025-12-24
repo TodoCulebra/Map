@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "version": 1,
+    "generated": "2025-12-24",
+    "island": "Culebra, Puerto Rico"
+  },
+
+  "categories": {
+    "hub":        { "color": "#ffffff", "label": "Hub" },
+    "food":       { "color": "#e63946", "label": "Food & Drink" },
+    "rentals":    { "color": "#f4d35e", "label": "Rentals" },
+    "grocery":    { "color": "#2a9d8f", "label": "Grocery" },
+    "gas":        { "color": "#f4a261", "label": "Gas" },
+    "lodging":    { "color": "#9d4edd", "label": "Lodging" },
+    "landmark":   { "color": "#457b9d", "label": "Landmarks" },
+    "health":     { "color": "#70e000", "label": "Health" },
+    "safety":     { "color": "#ffb703", "label": "Police & Safety" },
+    "driver":     { "color": "#ffb703", "label": "Delivery Driver" }
+  },
+
+  "locations": [
+    {
+      "name": "Todo Culebra Plaza Hub",
+      "type": "hub",
+      "lat": 18.3012,
+      "lng": -65.30213,
+      "description": "Your welcoming central base right by the ferry terminal.",
+      "tags": []
+    },
+
+    { "name": "Playa Melones Snorkel", "type": "landmark", "lat": 18.303182, "lng": -65.310238, "description": "Top shore snorkeling spot with calm, clear waters.", "tags": ["snorkeling"] },
+    { "name": "Flamenco Beach", "type": "landmark", "lat": 18.329277, "lng": -65.317917, "description": "World-famous crescent beach with diamond-white sand.", "tags": ["beach"] },
+    { "name": "Christmas Tree", "type": "landmark", "lat": 18.311861, "lng": -65.298806, "description": "Culebra's magical town Christmas tree.", "tags": [] },
+    { "name": "Terminal de Lanchas Culebra", "type": "landmark", "lat": 18.3015581, "lng": -65.3025209, "description": "Main ferry terminal connecting Culebra with mainland Puerto Rico.", "tags": ["transport"] },
+    { "name": "Public Dock (Municipal Dock)", "type": "landmark", "lat": 18.3031363, "lng": -65.2996163, "description": "Municipal dock used for local boats, water taxis, and island tours.", "tags": ["transport"] },
+
+    { "name": "E-Bike Rentals", "type": "rentals", "lat": 18.309611, "lng": -65.303778, "description": "Best way to explore the island!", "tags": ["bikes"] },
+
+    { "name": "Dakiti Gas Station & Mini Market", "type": "gas", "lat": 18.3012105, "lng": -65.3007495, "description": "Convenient gas station and mini market serving Playa Sardinas II.", "tags": [] },
+
+    { "name": "Colmado Milka", "type": "grocery", "lat": 18.30347, "lng": -65.30109, "description": "Local grocery store with essentials and snacks.", "tags": [] },
+    { "name": "Superette Mayra", "type": "grocery", "lat": 18.30302, "lng": -65.29988, "description": "Convenient mini-market in the heart of town.", "tags": [] },
+    { "name": "Genesis Mini Market", "type": "grocery", "lat": 18.30366, "lng": -65.30047, "description": "Small grocery shop offering drinks, snacks, and essentials.", "tags": [] },
+
+    { "name": "La Jibara - Pizzería Creativa", "type": "food", "lat": 18.3016694, "lng": -65.3024268, "description": "Delicious pizza enjoyed alongside a beautiful sunset view.", "tags": ["pizza"] },
+    { "name": "Zaco's Tacos Restaurant", "type": "food", "lat": 18.3032117, "lng": -65.3003098, "description": "Caribbean-Mexican fusion tacos with island vibes.", "tags": ["tacos"] },
+    { "name": "Dinghy Dock Restaurant", "type": "food", "lat": 18.3022135, "lng": -65.2993188, "description": "Waterfront dining with fresh seafood and iconic Culebra atmosphere.", "tags": ["seafood"] },
+    { "name": "Pan Café", "type": "food", "lat": 18.3028236, "lng": -65.3008936, "description": "Fresh pastries, sandwiches, and great coffee in town.", "tags": ["breakfast"] },
+    { "name": "El Batey", "type": "food", "lat": 18.3058719, "lng": -65.3025111, "description": "Local hangout with drinks, food, and a lively island vibe.", "tags": ["bar"] },
+    { "name": "Nina's Restaurant", "type": "food", "lat": 18.3099549, "lng": -65.3029437, "description": "Puerto Rican home-style cooking with generous portions.", "tags": [] },
+    { "name": "La Pista Café Restaurante", "type": "food", "lat": 18.3118458, "lng": -65.3046252, "description": "Casual dining spot near the airport with local favorites.", "tags": [] },
+    { "name": "Happy Landing", "type": "food", "lat": 18.3112506, "lng": -65.3025512, "description": "Relaxed bar and grill with cold drinks and comfort food.", "tags": ["bar"] },
+    { "name": "Come y Vete", "type": "food", "lat": 18.3155132, "lng": -65.3084857, "description": "Quick bites and takeout favorites for hungry explorers.", "tags": ["fast food"] },
+    { "name": "Treasure Bay Restaurant", "type": "food", "lat": 18.3030522, "lng": -65.3011292, "description": "Seafood and island dishes near the canal.", "tags": ["seafood"] },
+    { "name": "Moncho’s BBQ", "type": "food", "lat": 18.3028154, "lng": -65.3010041, "description": "BBQ meats and Puerto Rican comfort food.", "tags": ["bbq"] },
+    { "name": "El Navegante de Culebra", "type": "food", "lat": 18.3031122, "lng": -65.2999219, "description": "Seafood restaurant with a nautical theme.", "tags": ["seafood"] },
+    { "name": "Mamacita's Restaurant and Bar", "type": "food", "lat": 18.3020819, "lng": -65.3002362, "description": "Iconic waterfront bar and restaurant with live music.", "tags": ["bar"] },
+    { "name": "Salsa Y Sazon", "type": "food", "lat": 18.3101613, "lng": -65.2982423, "description": "Bold Puerto Rican flavors and hearty plates.", "tags": [] },
+    { "name": "Lechonera La Criolla", "type": "food", "lat": 18.3081047, "lng": -65.3027196, "description": "Traditional lechonera serving roasted pork and local sides.", "tags": ["pork"] },
+    { "name": "Gustitos KVO", "type": "food", "lat": 18.3135986, "lng": -65.301445, "description": "Sweet treats and snacks perfect for a hot day.", "tags": ["dessert"] },
+    { "name": "Kiosko La Pica", "type": "food", "lat": 18.3117529, "lng": -65.2921967, "description": "Local kiosk serving hearty Puerto Rican dishes.", "tags": [] },
+    { "name": "D's Garden", "type": "food", "lat": 18.3088178, "lng": -65.2931378, "description": "A cozy island spot serving fresh local dishes with a garden vibe.", "tags": [] },
+    { "name": "Le Deli Bleu", "type": "food", "lat": 18.3012907, "lng": -65.3021101, "description": "French-inspired deli offering pastries, sandwiches, and great coffee.", "tags": ["breakfast"] },
+
+    { "name": "Club Seabourne", "type": "lodging", "lat": 18.2905573, "lng": -65.2893351, "description": "Boutique waterfront hotel offering tranquil stays and beautiful views.", "tags": ["hotel"] },
+
+    { "name": "Culebra Police Station", "type": "safety", "lat": 18.30394, "lng": -65.30152, "description": "Local police station serving the island.", "tags": ["police"] },
+    { "name": "Culebra Health Clinic", "type": "health", "lat": 18.30341, "lng": -65.29998, "description": "Primary medical clinic for residents and visitors.", "tags": ["clinic"] },
+
+    { "name": "Heather's Pizza", "type": "food", "lat": 18.30375, "lng": -65.30095, "description": "Popular local pizza spot loved by residents and tourists.", "tags": ["pizza"] }
+  ],
+
+  "drivers": [
+    {
+      "name": "Delivery Driver",
+      "type": "driver",
+      "description": "Simulated delivery route around town.",
+      "route": [
+        { "lat": 18.3016694, "lng": -65.3024268 },
+        { "lat": 18.30182, "lng": -65.30225 },
+        { "lat": 18.30205, "lng": -65.302 },
+        { "lat": 18.30233, "lng": -65.3017 },
+        { "lat": 18.30262, "lng": -65.30142 },
+        { "lat": 18.3029, "lng": -65.30115 },
+        { "lat": 18.30325, "lng": -65.3009 },
+        { "lat": 18.30355, "lng": -65.30065 },
+        { "lat": 18.3039, "lng": -65.3004 },
+        { "lat": 18.3044, "lng": -65.3002 },
+        { "lat": 18.305, "lng": -65.3001 },
+        { "lat": 18.3056, "lng": -65.3002 },
+        { "lat": 18.3062, "lng": -65.3004 },
+        { "lat": 18.3068, "lng": -65.3007 },
+        { "lat": 18.3074, "lng": -65.301 },
+        { "lat": 18.308, "lng": -65.3013 },
+        { "lat": 18.3086, "lng": -65.3016 },
+        { "lat": 18.3092, "lng": -65.3019 },
+        { "lat": 18.3098, "lng": -65.3022 },
+        { "lat": 18.3103, "lng": -65.3025 },
+        { "lat": 18.3107, "lng": -65.3028 }
+      ]
+    }
+  ]
+}
