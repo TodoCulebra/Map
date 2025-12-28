@@ -6,7 +6,7 @@
   },
 
   "categories": {
-    "hub":        { "color": "#ffffff", "label": "Hub" },
+    "hub":        { "color": "#ffffff", "label": "www.shopculebra.com" },
     "food":       { "color": "#e63946", "label": "Food & Drink 🍕" },
     "rentals":    { "color": "#f4d35e", "label": "Rentals" },
     "grocery":    { "color": "#2a9d8f", "label": "Grocery" },
@@ -102,3 +102,4 @@
   ]
 
 }
+
