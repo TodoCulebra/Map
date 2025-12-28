@@ -24,7 +24,7 @@
       "lat": 18.3012,
       "lng": -65.30213,
       "description": "🍕 ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a> Delicious pizza enjoyed alongside a beautiful sunset view.",
-      "tags": [pizza]
+      "tags": ["pizza"]
     },
 
     { "name": "Playa Melones Snorkel", "type": "landmark", "lat": 18.303182, "lng": -65.310238, "description": "Top shore snorkeling spot with calm, clear waters.", "tags": ["snorkeling"] },
@@ -101,6 +101,7 @@
   ]
 
 }
+
 
 
 
