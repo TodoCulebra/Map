@@ -6,7 +6,7 @@
   },
 
   "categories": {
-    "hub":        { "color": "#ffffff", "label": "www.shopculebra.com" },
+    "hub":        { "color": "#ffffff", "label": "Hub" },
     "food":       { "color": "#e63946", "label": "Food & Drink 🍕" },
     "rentals":    { "color": "#f4d35e", "label": "Rentals" },
     "grocery":    { "color": "#2a9d8f", "label": "Grocery" },
@@ -15,7 +15,6 @@
     "landmark":   { "color": "#457b9d", "label": "Landmarks" },
     "health":     { "color": "#70e000", "label": "Health" },
     "safety":     { "color": "#ffb703", "label": "Police & Safety" },
-    "driver":     { "color": "#ffb703", "label": "Delivery Driver" }
   },
 
   "locations": [
@@ -24,8 +23,8 @@
       "type": "hub",
       "lat": 18.3012,
       "lng": -65.30213,
-      "description": "Your welcoming central base right by the ferry terminal.",
-      "tags": []
+      "description": "🍕 ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a> Delicious pizza enjoyed alongside a beautiful sunset view.",
+      "tags": [pizza]
     },
 
     { "name": "Playa Melones Snorkel", "type": "landmark", "lat": 18.303182, "lng": -65.310238, "description": "Top shore snorkeling spot with calm, clear waters.", "tags": ["snorkeling"] },
@@ -102,5 +101,6 @@
   ]
 
 }
+
 
 
