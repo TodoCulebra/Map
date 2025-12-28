@@ -7,7 +7,7 @@
 
   "categories": {
     "hub":        { "color": "#ffffff", "label": "Hub" },
-    "food":       { "color": "#e63946", "label": "Food & Drink 🍕" },
+    "food":       { "color": "#e63946", "label": "Food & Drink" },
     "rentals":    { "color": "#f4d35e", "label": "Rentals" },
     "grocery":    { "color": "#2a9d8f", "label": "Grocery" },
     "gas":        { "color": "#f4a261", "label": "Gas" },
@@ -101,6 +101,7 @@
   ]
 
 }
+
 
 
 
