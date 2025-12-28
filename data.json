@@ -42,7 +42,7 @@
     { "name": "Superette Mayra", "type": "grocery", "lat": 18.30302, "lng": -65.29988, "description": "Convenient mini-market in the heart of town.", "tags": [] },
     { "name": "Genesis Mini Market", "type": "grocery", "lat": 18.30366, "lng": -65.30047, "description": "Small grocery shop offering drinks, snacks, and essentials.", "tags": [] },
 
-    { "name": "🍕 La Jibara - Pizzería Creativa", "type": "food", "lat": 18.3016694, "lng": -65.3024268, "description": "ORDER HERE: WWW.ShopCULEBRA.COM Delicious pizza enjoyed alongside a beautiful sunset view.", "tags": ["pizza"] },
+    { "name": "🍕 La Jibara - Pizzería Creativa", "type": "food", "lat": 18.3016694, "lng": -65.3024268, "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a> Delicious pizza enjoyed alongside a beautiful sunset view.", "tags": ["pizza"] },
     { "name": "Zaco's Tacos Restaurant", "type": "food", "lat": 18.3032117, "lng": -65.3003098, "description": "Caribbean-Mexican fusion tacos with island vibes.", "tags": ["tacos"] },
     { "name": "Dinghy Dock Restaurant", "type": "food", "lat": 18.3022135, "lng": -65.2993188, "description": "Waterfront dining with fresh seafood and iconic Culebra atmosphere.", "tags": ["seafood"] },
     { "name": "Pan Café", "type": "food", "lat": 18.3028236, "lng": -65.3008936, "description": "Fresh pastries, sandwiches, and great coffee in town.", "tags": ["breakfast"] },
@@ -102,4 +102,5 @@
   ]
 
 }
+
 
