@@ -3,448 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Kokomo Plaza • Culebra</title>
-
+  <title>Todo Culebra Plaza Hub • Culebra</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
   <style>
-    :root {
-      --bg-main: #0b1f2a;
-      --bg-panel: rgba(12, 39, 52, 0.96);
-      --bg-panel-light: rgba(255, 255, 255, 0.96);
-      --accent-sand: #f4e4c1;
-      --text-main: #ffffff;
-      --radius-lg: 18px;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: var(--bg-main);
-      color: var(--text-main);
-      overflow: hidden;
-    }
-
-    #map {
-      height: 100vh;
-      width: 100vw;
-    }
-
+    body { margin: 0; height: 100vh; }
+    #map { height: 100%; width: 100%; }
     .dot-icon {
       width: 18px;
       height: 18px;
       border-radius: 50%;
+      background: #ffffff;
       border: 2px solid black;
-    }
-
-    /* ⭐ DESKTOP SIDE PANEL — TWO COLUMN LAYOUT */
-    .side-panel {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      width: 420px;
-      background: var(--bg-panel);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      z-index: 1500;
-      color: white;
-    }
-
-    /* ⭐ Shrink header text */
-    .side-panel-section-title {
-      margin-top: 10px;
-      margin-bottom: 4px;
-      font-size: 0.65em;
-      text-transform: uppercase;
-      color: var(--accent-sand);
-    }
-
-    /* ⭐ Two-column layout */
-    .legend-columns {
-      display: flex;
-      gap: 16px;
-    }
-
-    .legend-left {
-      width: 45%;
-    }
-
-    .legend-right {
-      width: 55%;
-      border-left: 1px solid rgba(255,255,255,0.15);
-      padding-left: 12px;
-    }
-
-    .category-button {
-      width: 100%;
-      margin: 4px 0;
-      padding: 8px 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      cursor: pointer;
-      color: white;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .category-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .sub-item {
-      padding: 6px 0;
-      cursor: pointer;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      font-size: 0.9em;
-    }
-
-    .sub-item-color-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
-
-    /* ⭐ MOBILE — drawer only */
-    @media (max-width: 799px) {
-      .side-panel {
-        display: none;
-      }
-      .bottom-drawer {
-        display: block;
-      }
-    }
-
-    @media (min-width: 800px) {
-      .bottom-drawer {
-        display: none;
-      }
-    }
-
-    /* MOBILE DRAWER */
-    .bottom-drawer {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--bg-panel-light);
-      border-radius: 16px 16px 0 0;
-      transform: translateY(70%);
-      transition: transform 0.25s ease-out;
-      z-index: 1600;
-      color: black;
-      display: none;
-    }
-
-    .bottom-drawer.open {
-      transform: translateY(0%);
-    }
-
-    .drawer-handle {
-      width: 46px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.2);
-      margin: 8px auto;
-    }
-
-    .drawer-content {
-      padding: 10px 14px;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-
-    .drawer-item {
-      padding: 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
-
-    /* FABs */
-    .fab-container {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1700;
-    }
-
-    .fab {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      border: none;
-      background: var(--bg-panel);
-      color: white;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-      cursor: pointer;
-      font-size: 1.1em;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
-
 <body>
+  <div id="map"></div>
 
-<div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Create the map centered on the hub
+    const map = L.map('map').setView([18.3012, -65.30213], 16);
 
-<!-- ⭐ DESKTOP SIDE PANEL -->
-<div class="side-panel">
-  <div class="legend-columns">
+    // Add simple OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 20,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-    <!-- LEFT COLUMN: CATEGORIES -->
-    <div class="legend-left">
-      <div class="side-panel-section-title">Categories</div>
-
-      <button class="category-button" onclick="toggleCategory('hub')">
-        <span class="category-dot" style="background:#ffffff;"></span> Hub
-      </button>
-      <button class="category-button" onclick="toggleCategory('safety')">
-        <span class="category-dot" style="background:#ffb703;"></span> Police & Safety
-      </button>
-      <button class="category-button" onclick="toggleCategory('health')">
-        <span class="category-dot" style="background:#70e000;"></span> Health
-      </button>
-
-      <button class="category-button" onclick="toggleCategory('landmark')">
-        <span class="category-dot" style="background:#457b9d;"></span> Landmarks
-      </button>
-      <button class="category-button" onclick="toggleCategory('food')">
-        <span class="category-dot" style="background:#e63946;"></span> Food & Drink
-      </button>
-      <button class="category-button" onclick="toggleCategory('lodging')">
-        <span class="category-dot" style="background:#9d4edd;"></span> Lodging
-      </button>
-      <button class="category-button" onclick="toggleCategory('rentals')">
-        <span class="category-dot" style="background:#f4d35e;"></span> Rentals
-      </button>
-
-      <button class="category-button" onclick="toggleCategory('grocery')">
-        <span class="category-dot" style="background:#2a9d8f;"></span> Grocery
-      </button>
-      <button class="category-button" onclick="toggleCategory('gas')">
-        <span class="category-dot" style="background:#f4a261;"></span> Gas
-      </button>
-
-      <button class="category-button" onclick="toggleCategory('driver')">
-        <span class="category-dot" style="background:#ffb703;"></span> Delivery Driver
-      </button>
-    </div>
-
-    <!-- RIGHT COLUMN: PLACES -->
-    <div class="legend-right">
-      <div class="side-panel-section-title">Places</div>
-      <div id="sidePanelList"></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MOBILE DRAWER -->
-<div class="bottom-drawer" id="bottomDrawer">
-  <div class="drawer-handle" id="drawerHandle"></div>
-  <div class="drawer-content" id="drawerContent"></div>
-</div>
-
-<!-- FABs -->
-<div class="fab-container">
-  <button class="fab" onclick="showAllVisible()">◻</button>
-  <button class="fab" onclick="cycleBaseLayer()">🗺️</button>
-  <button class="fab" onclick="toggleDarkMode()">☾</button>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-/* MAP INIT */
-const map = L.map('map').setView([18.30120, -65.30213], 12);
-
-const baseLayers = [
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20 }),
-  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'),
-  L.tileLayer('https://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg'),
-  L.tileLayer('https://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png')
-];
-
-let currentBaseIndex = 0;
-baseLayers[0].addTo(map);
-
-function cycleBaseLayer() {
-  map.removeLayer(baseLayers[currentBaseIndex]);
-  currentBaseIndex = (currentBaseIndex + 1) % baseLayers.length;
-  baseLayers[currentBaseIndex].addTo(map);
-}
-
-function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-}
-
-/* MARKERS */
-const categoryColors = {
-  hub: "#ffffff",
-  food: "#e63946",
-  rentals: "#f4d35e",
-  grocery: "#2a9d8f",
-  gas: "#f4a261",
-  lodging: "#9d4edd",
-  landmark: "#457b9d",
-  health: "#70e000",
-  safety: "#ffb703",
-  driver: "#ffb703"
-};
-
-const categoryGroups = {};
-const categoryVisible = {};
-const allMarkers = [];
-
-function slugify(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-}
-
-function addMarker(point) {
-  const color = categoryColors[point.type] || "gray";
-
-  const icon = L.divIcon({
-    className: "",
-    html: `<div class="dot-icon" style="background:${color}"></div>`,
-    iconSize: [18,18],
-    iconAnchor: [9,9]
-  });
-
-  const marker = L.marker([point.lat, point.lng], { icon });
-  marker.bindPopup(`<b>${point.name}</b><br>${point.description || ""}`);
-
-  if (!categoryGroups[point.type]) categoryGroups[point.type] = [];
-  categoryGroups[point.type].push(marker);
-
-  allMarkers.push(marker);
-}
-
-/* LOAD JSON */
-fetch("data.json")
-  .then(r => r.json())
-  .then(data => {
-    data.locations.forEach(addMarker);
-
-    data.drivers.forEach(driver => {
-      addMarker({
-        name: driver.name,
-        type: "driver",
-        lat: driver.route[0].lat,
-        lng: driver.route[0].lng,
-        description: driver.description
-      });
+    // Custom white dot icon
+    const hubIcon = L.divIcon({
+      className: "",
+      html: '<div class="dot-icon"></div>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
     });
 
-    toggleCategory("hub");
-  });
+    // Add the single marker
+    const marker = L.marker([18.3012, -65.30213], { icon: hubIcon }).addTo(map);
 
-/* CATEGORY TOGGLE */
-function toggleCategory(type) {
-  if (!categoryGroups[type]) return;
+    // Popup with the link
+    marker.bindPopup(`
+      <b>Todo Culebra Plaza Hub</b><br>
+      ORDER HERE: <a href="https://www.shopculebra.com" target="_blank">www.shopculebra.com</a>
+    `);
 
-  categoryVisible[type] = !categoryVisible[type];
-
-  if (categoryVisible[type]) {
-    categoryGroups[type].forEach(m => m.addTo(map));
-    buildListsForCategory(type);
-    zoomToCategory(type);
-
-    /* ⭐ AUTO-OPEN DRAWER ON MOBILE */
-    if (window.innerWidth < 800) {
-      openBottomDrawer();
-    }
-
-  } else {
-    categoryGroups[type].forEach(m => map.removeLayer(m));
-    clearLists();
-  }
-}
-
-/* LIST BUILDING */
-function buildListsForCategory(type) {
-  const list = document.getElementById("sidePanelList");
-  const drawer = document.getElementById("drawerContent");
-  list.innerHTML = "";
-  drawer.innerHTML = "";
-
-  const color = categoryColors[type];
-
-  categoryGroups[type].forEach(marker => {
-    const name = marker.getPopup().getContent().split("<br>")[0].replace("<b>","").replace("</b>","");
-
-    const div = document.createElement("div");
-    div.className = "sub-item";
-    div.innerHTML = `<div class="sub-item-color-dot" style="background:${color}"></div>${name}`;
-    div.onclick = () => {
-      map.setView(marker.getLatLng(), 16);
-      marker.openPopup();
-    };
-    list.appendChild(div);
-
-    const mDiv = document.createElement("div");
-    mDiv.className = "drawer-item";
-    mDiv.innerHTML = `<div class="sub-item-color-dot" style="background:${color}"></div>${name}`;
-    mDiv.onclick = () => {
-      map.setView(marker.getLatLng(), 16);
-      marker.openPopup();
-      openBottomDrawer();
-    };
-    drawer.appendChild(mDiv);
-  });
-}
-
-function clearLists() {
-  document.getElementById("sidePanelList").innerHTML = "";
-  document.getElementById("drawerContent").innerHTML = "";
-}
-
-/* ZOOM */
-function zoomToCategory(type) {
-  const group = categoryGroups[type];
-  if (!group || group.length === 0) return;
-
-  const bounds = L.latLngBounds(group.map(m => m.getLatLng()));
-  map.fitBounds(bounds, { padding: [40,40], maxZoom: 16 });
-}
-
-/* SHOW ALL */
-function showAllVisible() {
-  allMarkers.forEach(m => m.addTo(map));
-  const bounds = L.latLngBounds(allMarkers.map(m => m.getLatLng()));
-  map.fitBounds(bounds, { padding: [40,40], maxZoom: 16 });
-}
-
-/* DRAWER */
-let drawerOpen = false;
-const drawer = document.getElementById("bottomDrawer");
-document.getElementById("drawerHandle").onclick = () => {
-  drawerOpen = !drawerOpen;
-  drawer.classList.toggle("open");
-};
-
-function openBottomDrawer() {
-  drawerOpen = true;
-  drawer.classList.add("open");
-}
-
-map.on("click", () => {
-  drawerOpen = false;
-  drawer.classList.remove("open");
-});
-</script>
-
+    // Optional: open popup automatically on load
+    // marker.openPopup();
+  </script>
 </body>
 </html>
