@@ -8,13 +8,12 @@
   <style>
     body { margin: 0; height: 100vh; }
     #map { height: 100%; width: 100%; }
-    .dot-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #ffffff;
-      border: 2px solid black;
-      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    /* Optional: add a subtle shadow to make the emoji pop */
+    .pizza-marker {
+      font-size: 34px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      /* Center the emoji and prevent Leaflet from adding extra space */
+      line-height: 1;
     }
   </style>
 </head>
@@ -23,33 +22,30 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Create the map centered on the hub
     const map = L.map('map').setView([18.3012, -65.30213], 16);
 
-    // Add simple OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 20,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Custom white dot icon
-    const hubIcon = L.divIcon({
-      className: "",
-      html: '<div class="dot-icon"></div>',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9]
+    // Pizza emoji marker 🍕
+    const pizzaIcon = L.divIcon({
+      className: "", // Removes default Leaflet styling
+      html: '<div class="pizza-marker">🍕</div>',
+      iconSize: [40, 40],     // Size of the invisible box around the emoji
+      iconAnchor: [20, 20],   // Centers the emoji on the exact point
+      popupAnchor: [0, -20]   // Popup appears nicely above the pizza
     });
 
-    // Add the single marker
-    const marker = L.marker([18.3012, -65.30213], { icon: hubIcon }).addTo(map);
+    const marker = L.marker([18.3012, -65.30213], { icon: pizzaIcon }).addTo(map);
 
-    // Popup with the link
     marker.bindPopup(`
       <b>Todo Culebra Plaza Hub</b><br>
       ORDER HERE: <a href="https://www.shopculebra.com" target="_blank">www.shopculebra.com</a>
     `);
 
-    // Optional: open popup automatically on load
+    // Optional: automatically open the popup when the page loads
     // marker.openPopup();
   </script>
 </body>
