@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Todo Culebra Plaza Hub • Culebra</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <title>Todo Culebra • Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     body { margin: 0; height: 100vh; }
     #map { height: 100%; width: 100%; }
@@ -22,25 +23,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // --- Valid JSON data ---
-    const data = {
-      "locations": [
-        {
-          "name": "Todo Culebra Plaza Hub",
-          "lat": 18.3012,
-          "lng": -65.30213,
-          "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
-        },
-        {
-          "name": "Zaco's Tacos Restaurant",
-          "lat": 18.3057317,
-          "lng": -65.2975823,
-          "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
-        }
-      ]
-    };
-
-    // Initialize map centered roughly between points
     const map = L.map('map').setView([18.3035, -65.2998], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -48,10 +30,9 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Helper to build an emoji icon
     function makeEmojiIcon(emoji) {
       return L.divIcon({
-        className: "",               // no default Leaflet classes
+        className: "",
         html: `<div class="emoji-marker">${emoji}</div>`,
         iconSize: [40, 40],
         iconAnchor: [20, 20],
@@ -59,30 +40,54 @@
       });
     }
 
-    // Decide emoji per location (customize as needed)
     function chooseEmoji(name) {
       const lower = name.toLowerCase();
       if (lower.includes("taco") || lower.includes("zaco")) return "🌮";
       if (lower.includes("pizza")) return "🍕";
-      // Fallback for hubs or anything else
       if (lower.includes("hub") || lower.includes("todo culebra")) return "🍕";
       return "📍";
     }
 
-    // Add markers for all locations
-    data.locations.forEach(loc => {
-      const icon = makeEmojiIcon(chooseEmoji(loc.name));
-      const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
-      marker.bindPopup(`
-        <b>${loc.name}</b><br />
-        ${loc.description}
-      `);
-    });
+    // Load external JSON
+    fetch('locations.json')
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to load locations.json (${res.status})`);
+        return res.json();
+      })
+      .then(data => {
+        if (!data.locations || !Array.isArray(data.locations)) {
+          throw new Error('Invalid JSON: expected { locations: [...] }');
+        }
 
-    // Optional: fit map to all markers
-    const bounds = L.latLngBounds(data.locations.map(l => [l.lat, l.lng]));
-    map.fitBounds(bounds, { padding: [30, 30] });
+        const markers = [];
+
+        data.locations.forEach(loc => {
+          // Basic validation
+          if (typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
+
+          const icon = makeEmojiIcon(chooseEmoji(loc.name || ''));
+          const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+
+          marker.bindPopup(`
+            <b>${loc.name ?? 'Unnamed'}</b><br />
+            ${loc.description ?? ''}
+          `);
+
+          markers.push(marker);
+        });
+
+        // Fit to all markers (if any)
+        if (markers.length) {
+          const bounds = L.latLngBounds(markers.map(m => m.getLatLng()));
+          map.fitBounds(bounds, { padding: [30, 30] });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('There was a problem loading the locations. Check the console for details.');
+      });
   </script>
 </body>
 </html>
+``
 
