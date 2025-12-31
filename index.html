@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +9,11 @@
   <style>
     body { margin: 0; height: 100vh; }
     #map { height: 100%; width: 100%; }
-    /* Optional: add a subtle shadow to make the emoji pop */
-    .pizza-marker {
+    .emoji-marker {
       font-size: 34px;
       text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-      /* Center the emoji and prevent Leaflet from adding extra space */
       line-height: 1;
+      user-select: none;
     }
   </style>
 </head>
@@ -22,31 +22,67 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map').setView([18.3012, -65.30213], 16);
+    // --- Valid JSON data ---
+    const data = {
+      "locations": [
+        {
+          "name": "Todo Culebra Plaza Hub",
+          "lat": 18.3012,
+          "lng": -65.30213,
+          "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
+        },
+        {
+          "name": "Zaco's Tacos Restaurant",
+          "lat": 18.3057317,
+          "lng": -65.2975823,
+          "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
+        }
+      ]
+    };
+
+    // Initialize map centered roughly between points
+    const map = L.map('map').setView([18.3035, -65.2998], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 20,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Pizza emoji marker 🍕
-    const pizzaIcon = L.divIcon({
-      className: "", // Removes default Leaflet styling
-      html: '<div class="pizza-marker">🍕</div>',
-      iconSize: [40, 40],     // Size of the invisible box around the emoji
-      iconAnchor: [20, 20],   // Centers the emoji on the exact point
-      popupAnchor: [0, -20]   // Popup appears nicely above the pizza
+    // Helper to build an emoji icon
+    function makeEmojiIcon(emoji) {
+      return L.divIcon({
+        className: "",               // no default Leaflet classes
+        html: `<div class="emoji-marker">${emoji}</div>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -20]
+      });
+    }
+
+    // Decide emoji per location (customize as needed)
+    function chooseEmoji(name) {
+      const lower = name.toLowerCase();
+      if (lower.includes("taco") || lower.includes("zaco")) return "🌮";
+      if (lower.includes("pizza")) return "🍕";
+      // Fallback for hubs or anything else
+      if (lower.includes("hub") || lower.includes("todo culebra")) return "🍕";
+      return "📍";
+    }
+
+    // Add markers for all locations
+    data.locations.forEach(loc => {
+      const icon = makeEmojiIcon(chooseEmoji(loc.name));
+      const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+      marker.bindPopup(`
+        <b>${loc.name}</b><br />
+        ${loc.description}
+      `);
     });
 
-    const marker = L.marker([18.3012, -65.30213], { icon: pizzaIcon }).addTo(map);
-
-    marker.bindPopup(`
-      <b>Todo Culebra Plaza Hub</b><br>
-      ORDER HERE: <a href="https://www.shopculebra.com" target="_blank">www.shopculebra.com</a>
-    `);
-
-    // Optional: automatically open the popup when the page loads
-    // marker.openPopup();
+    // Optional: fit map to all markers
+    const bounds = L.latLngBounds(data.locations.map(l => [l.lat, l.lng]));
+    map.fitBounds(bounds, { padding: [30, 30] });
   </script>
 </body>
 </html>
+
