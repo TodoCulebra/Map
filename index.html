@@ -23,13 +23,14 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    // --- Map setup ---
     const map = L.map('map').setView([18.3035, -65.2998], 15);
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 20,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // --- Emoji marker helpers ---
     function makeEmojiIcon(emoji) {
       return L.divIcon({
         className: "",
@@ -40,7 +41,7 @@
       });
     }
 
-    function chooseEmoji(name) {
+    function chooseEmoji(name = '') {
       const lower = name.toLowerCase();
       if (lower.includes("taco") || lower.includes("zaco")) return "🌮";
       if (lower.includes("pizza")) return "🍕";
@@ -48,48 +49,81 @@
       return "📍";
     }
 
-    // Load external JSON
-    fetch('data.json')
-      .then(res => {
-        if (!res.ok) throw new Error(`Failed to load locations.json (${res.status})`);
-        return res.json();
-      })
-      .then(data => {
+    // --- Utility: unescape HTML entities like &lt; &gt; in description strings ---
+    function htmlDecode(str = '') {
+      const txt = document.createElement('textarea');
+      txt.innerHTML = str;
+      return txt.value;
+    }
+
+    // --- Load external JSON ---
+    (async function loadLocations() {
+      // If data.json is at the site root: use '/data.json'
+      // If it's next to this HTML file: use 'data.json'
+      // If it's in /data/: use '/data/data.json'
+      const url = 'data.json?ts=' + Date.now(); // <-- adjust if needed
+
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+
+        // Debug info to console
+        console.log('Fetch URL:', url);
+        console.log('HTTP status:', res.status);
+        console.log('Content-Type:', res.headers.get('content-type'));
+
+        const raw = await res.text();
+        console.log('Response preview:', raw.slice(0, 200));
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status} on ${url}\n${raw}`);
+        }
+
+        // Parse JSON (even if server sent text/plain)
+        let data;
+        try {
+          data = JSON.parse(raw);
+        } catch (e) {
+          throw new Error('JSON parse error. The response is not valid JSON.\n' + e.message);
+        }
+
         if (!data.locations || !Array.isArray(data.locations)) {
-          throw new Error('Invalid JSON: expected { locations: [...] }');
+          throw new Error('Invalid JSON: expected an object with a "locations" array.');
         }
 
         const markers = [];
 
         data.locations.forEach(loc => {
-          // Basic validation
-          if (typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return;
+          const { lat, lng, name, description } = loc;
+          if (typeof lat !== 'number' || typeof lng !== 'number') {
+            console.warn('Skipping location with invalid lat/lng:', loc);
+            return;
+          }
 
-          const icon = makeEmojiIcon(chooseEmoji(loc.name || ''));
-          const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+          const icon = makeEmojiIcon(chooseEmoji(name));
+          const marker = L.marker([lat, lng], { icon }).addTo(map);
+
+          // Decode entities so links like &lt;a href=...&gt; render correctly
+          const decodedDesc = htmlDecode(description);
 
           marker.bindPopup(`
-            <b>${loc.name ?? 'Unnamed'}</b><br />
-            ${loc.description ?? ''}
+            <b>${name ?? 'Unnamed'}</b><br />
+            ${decodedDesc ?? ''}
           `);
 
           markers.push(marker);
         });
 
-        // Fit to all markers (if any)
         if (markers.length) {
           const bounds = L.latLngBounds(markers.map(m => m.getLatLng()));
           map.fitBounds(bounds, { padding: [30, 30] });
+        } else {
+          console.warn('No markers created from data.json');
         }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('There was a problem loading the locations. Check the console for details.');
-      });
+      } catch (err) {
+        console.error('Error loading locations:', err);
+        alert('There was a problem loading the locations. Open DevTools → Console for details.');
+      }
+    })();
   </script>
 </body>
 </html>
-``
-
-
-
