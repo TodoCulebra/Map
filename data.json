@@ -8,7 +8,7 @@
     },
     {
       "name": "Zaco's Tacos Restaurant",
-      "lat": 18.3037317,
+      "lat": 18.300,
       "lng": -65.2955823,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
@@ -26,6 +26,7 @@
     }
   ]
 }
+
 
 
 
