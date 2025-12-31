@@ -1,31 +1,32 @@
 {
   "locations": [
     {
-      "name": "Todo Culebra Plaza Hub",
+      "name": "Todo Culebra Plaza hub",
       "lat": 18.3012,
       "lng": -65.30213,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
     {
-      "name": "Zaco's Tacos Restaurant",
+      "name": "Zaco's tacos Restaurant",
       "lat": 18.300,
       "lng": -65.2955823,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
       {
-      "name": "Kokomo Hotel",
-      "lat": 18.3012,
+      "name": "Kokomo Hotel hub",
+      "lat": 18.29,
       "lng": -65.30213,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
     {
-      "name": "Zaco's Tacos Restaurant",
-      "lat": 18.3057317,
+      "name": "Zaco's Tacos Restaurant pizza",
+      "lat": 18.31,
       "lng": -65.2975823,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     }
   ]
 }
+
 
 
 
