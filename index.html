@@ -3,131 +3,288 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
   <title>Todo Culebra • Map</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
   <style>
-    body { margin: 0; height: 100vh; }
-    #map { height: 100%; width: 100%; }
+    :root {
+      --bg: #0b1220;         /* deep navy */
+      --fg: #f1f5f9;         /* near-white */
+      --accent: #00c2a8;     /* teal accent */
+      --accent-dark: #009883;
+    }
+
+    /* Reset and layout */
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Welcome screen styles */
+    .welcome {
+      position: fixed;
+      inset: 0; /* top/right/bottom/left: 0 */
+      display: grid;
+      place-items: center;
+      background: radial-gradient(1200px 800px at 30% 20%, #13203a, var(--bg));
+      z-index: 9999;
+    }
+
+    .welcome-inner {
+      text-align: center;
+      max-width: 720px;
+      padding: 24px;
+      animation: fadeInUp 600ms ease both;
+    }
+
+    .brand {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      margin-bottom: 26px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #062b27;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 194, 168, 0.35);
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+    .cta:focus { outline: 2px solid #82efe0; outline-offset: 3px; }
+    .cta:hover { transform: translateY(-1px); background: var(--accent-dark); }
+    .cta:active { transform: translateY(0); box-shadow: 0 3px 10px rgba(0, 194, 168, 0.28); }
+
+    .supporting {
+      margin-top: 18px;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Map container (initially hidden) */
+    #map {
+      height: 100vh;
+      width: 100%;
+      display: none; /* hidden until user clicks */
+    }
+
+    /* Emoji marker styling */
     .emoji-marker {
       font-size: 34px;
       text-shadow: 0 2px 6px rgba(0,0,0,0.6);
       line-height: 1;
       user-select: none;
     }
+
+    /* Small helper: subtle footer link on welcome */
+    .welcome-footer {
+      position: fixed;
+      bottom: 14px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .link {
+      color: #80ffe9;
+      text-decoration: none;
+    }
+    .link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div id="map"></div>
 
+  <!-- Welcome Screen -->
+  <section class="welcome" id="welcome" aria-labelledby="welcome-title" role="dialog" aria-modal="true">
+    <div class="welcome-inner">
+      <h1 class="brand" id="welcome-title">Welcome to InCulebra</h1>
+      <p class="tagline">Explore spots, hubs, restaurants, and more across Culebra.</p>
+
+      <button class="cta" id="showMapBtn" type="button" aria-controls="map" aria-expanded="false">
+        <span>🗺️ Culebra Map</span>
+      </button>
+
+      <p class="supporting">Tap the button to load the interactive map.</p>
+    </div>
+
+    <div class="welcome-footer">
+      <span>Powered by OpenStreetMap & Leaflet</span>
+      &nbsp;•&nbsp;
+      <a class="link" href="https://www.shopculebra.com" target="_blank" rel="noopener">Order at ShopCulebra</a>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <div id="map" role="region" aria-label="Culebra map"></div>
+
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
-    // --- Map setup ---
-    const map = L.map('map').setView([18.3035, -65.2998], 15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 20,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    // Remember user's choice to skip welcome next time (optional)
+    const STORAGE_KEY = 'inculebra_skip_welcome';
 
-    // --- Emoji marker helpers ---
-    function makeEmojiIcon(emoji) {
-      return L.divIcon({
-        className: "",
-        html: `<div class="emoji-marker">${emoji}</div>`,
-        iconSize: [40, 40],
-        iconAnchor: [20, 20],
-        popupAnchor: [0, -20]
-      });
+    const welcomeEl = document.getElementById('welcome');
+    const mapEl = document.getElementById('map');
+    const btn = document.getElementById('showMapBtn');
+
+    // If user has visited and clicked before, skip welcome
+    const skipWelcome = localStorage.getItem(STORAGE_KEY) === 'yes';
+    if (skipWelcome) {
+      welcomeEl.style.display = 'none';
+      mapEl.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
+      initMapAndData(); // initialize immediately
     }
 
-    function chooseEmoji(name = '') {
-      const lower = name.toLowerCase();
-      if (lower.includes("tacos")) return "🌮";
-      if (lower.includes("snorkel")) return "🤿";
-      if (lower.includes("pizza")) return "🍕";
-      if (lower.includes("hub") || lower.includes("todo culebra")) return "🧐";
-      return "📍";
-    }
+    // Button behavior
+    btn.addEventListener('click', () => {
+      // Hide welcome, show map
+      welcomeEl.style.display = 'none';
+      mapEl.style.display = 'block';
+      btn.setAttribute('aria-expanded', 'true');
 
-    // --- Utility: unescape HTML entities like &lt; &gt; in description strings ---
-    function htmlDecode(str = '') {
-      const txt = document.createElement('textarea');
-      txt.innerHTML = str;
-      return txt.value;
-    }
+      // Persist preference
+      localStorage.setItem(STORAGE_KEY, 'yes');
 
-    // --- Load external JSON ---
-    (async function loadLocations() {
-      // If data.json is at the site root: use '/data.json'
-      // If it's next to this HTML file: use 'data.json'
-      // If it's in /data/: use '/data/data.json'
-      const url = 'data.json?ts=' + Date.now(); // <-- adjust if needed
+      // Initialize map & load data
+      initMapAndData();
+    });
 
-      try {
-        const res = await fetch(url, { cache: 'no-store' });
+    // --- Map & data initialization (called only when map is shown) ---
+    function initMapAndData() {
+      // Map setup
+      const map = L.map('map').setView([18.3035, -65.2998], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
 
-        // Debug info to console
-        console.log('Fetch URL:', url);
-        console.log('HTTP status:', res.status);
-        console.log('Content-Type:', res.headers.get('content-type'));
+      // Emoji marker helpers
+      function makeEmojiIcon(emoji) {
+        return L.divIcon({
+          className: "",
+          html: `<div class="emoji-marker">${emoji}</div>`,
+          iconSize: [40, 40],
+          iconAnchor: [20, 20],
+          popupAnchor: [0, -20]
+        });
+      }
 
-        const raw = await res.text();
-        console.log('Response preview:', raw.slice(0, 200));
+      function chooseEmoji(name = '') {
+        const lower = name.toLowerCase();
+        if (lower.includes("tacos")) return "🌮";
+        if (lower.includes("snorkel")) return "🤿";
+        if (lower.includes("pizza")) return "🍕";
+        if (lower.includes("hub") || lower.includes("todo culebra")) return "🧐";
+        return "📍";
+      }
 
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status} on ${url}\n${raw}`);
-        }
+      // Unescape HTML entities like &lt; &gt; in description strings
+      function htmlDecode(str = '') {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+      }
 
-        // Parse JSON (even if server sent text/plain)
-        let data;
+      // Load external JSON (unchanged path; adjust if needed)
+      (async function loadLocations() {
+        const url = 'data.json?ts=' + Date.now(); // cache-bust but do not alter JSON content
+
         try {
-          data = JSON.parse(raw);
-        } catch (e) {
-          throw new Error('JSON parse error. The response is not valid JSON.\n' + e.message);
-        }
+          const res = await fetch(url, { cache: 'no-store' });
 
-        if (!data.locations || !Array.isArray(data.locations)) {
-          throw new Error('Invalid JSON: expected an object with a "locations" array.');
-        }
+          // Debug info to console
+          console.log('Fetch URL:', url);
+          console.log('HTTP status:', res.status);
+          console.log('Content-Type:', res.headers.get('content-type'));
 
-        const markers = [];
+          const raw = await res.text();
+          console.log('Response preview:', raw.slice(0, 200));
 
-        data.locations.forEach(loc => {
-          const { lat, lng, name, description } = loc;
-          if (typeof lat !== 'number' || typeof lng !== 'number') {
-            console.warn('Skipping location with invalid lat/lng:', loc);
-            return;
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status} on ${url}\n${raw}`);
           }
 
-          const icon = makeEmojiIcon(chooseEmoji(name));
-          const marker = L.marker([lat, lng], { icon }).addTo(map);
+          // Parse JSON (even if server sent text/plain)
+          let data;
+          try {
+            data = JSON.parse(raw);
+          } catch (e) {
+            throw new Error('JSON parse error. The response is not valid JSON.\n' + e.message);
+          }
 
-          // Decode entities so links like &lt;a href=...&gt; render correctly
-          const decodedDesc = htmlDecode(description);
+          if (!data.locations || !Array.isArray(data.locations)) {
+            throw new Error('Invalid JSON: expected an object with a "locations" array.');
+          }
 
-          marker.bindPopup(`
-            <b>${name ?? 'Unnamed'}</b><br />
-            ${decodedDesc ?? ''}
-          `);
+          const markers = [];
 
-          markers.push(marker);
-        });
+          data.locations.forEach(loc => {
+            const { lat, lng, name, description } = loc;
+            if (typeof lat !== 'number' || typeof lng !== 'number') {
+              console.warn('Skipping location with invalid lat/lng:', loc);
+              return;
+            }
 
-        if (markers.length) {
-          const bounds = L.latLngBounds(markers.map(m => m.getLatLng()));
-          map.fitBounds(bounds, { padding: [30, 30] });
-        } else {
-          console.warn('No markers created from data.json');
+            const icon = makeEmojiIcon(chooseEmoji(name));
+            const marker = L.marker([lat, lng], { icon }).addTo(map);
+
+            // Decode entities so links like &lt;a href=...&gt; render correctly
+            const decodedDesc = htmlDecode(description);
+
+            marker.bindPopup(`
+              <b>${name ?? 'Unnamed'}</b><br />
+              ${decodedDesc ?? ''}
+            `);
+
+            markers.push(marker);
+          });
+
+          if (markers.length) {
+            const bounds = L.latLngBounds(markers.map(m => m.getLatLng()));
+            map.fitBounds(bounds, { padding: [30, 30] });
+          } else {
+            console.warn('No markers created from data.json');
+          }
+        } catch (err) {
+          console.error('Error loading locations:', err);
+          alert('There was a problem loading the locations. Open DevTools → Console for details.');
         }
-      } catch (err) {
-        console.error('Error loading locations:', err);
-        alert('There was a problem loading the locations. Open DevTools → Console for details.');
-      }
-    })();
+      })();
+    }
   </script>
 </body>
 </html>
-
-
-
