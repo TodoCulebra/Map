@@ -19,13 +19,38 @@
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
     {
-      "name": "Snorkel With Locals",
-      "lat": 18.3063341,
-      "lng": -65.2949,
+      "name": "Playa Flamenco",
+      "lat": 18.3280301,
+      "lng": -65.3358813,
       "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+    },
+     {
+      "name": "Tamarindo Beach",
+      "lat": 18.3179129,
+      "lng": -65.3912512,
+      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+    },
+    {
+      "name": "Malones Beach",
+      "lat": 18.3031684,
+      "lng": -65.3128741,
+      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+    },
+    {
+      "name": "Playa Dátiles",
+      "lat": 18.2961511,
+      "lng": -65.3032101,
+      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+    },
+    {
+      "name": "Playa Zoni",
+      "lat": 18.3197313,
+      "lng": -65.2757021,
+      "description": "Camp Today!: <a href='https://www.culebracamping.com/' target='_blank'>https://www.culebracamping.com/</a>"
     }
   ]
 }
+
 
 
 
