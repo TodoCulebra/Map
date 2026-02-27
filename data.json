@@ -2,66 +2,59 @@
   "locations": [
     {
       "name": "Todo Culebra Plaza Hub",
+      "category": "hub",
       "lat": 18.3012,
       "lng": -65.30213,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
     {
       "name": "Zaco's Tacos Restaurant",
+      "category": "food",
       "lat": 18.300,
       "lng": -65.2955823,
-      "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>https://www.zacostacos.com</a>"
+      "description": "ORDER HERE: <a href='https://www.zacostacos.com' target='_blank'>https://www.zacostacos.com</a>"
     },
-      {
+    {
       "name": "Kokomo Hotel",
+      "category": "hotel",
       "lat": 18.29,
       "lng": -65.30213,
       "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
     },
     {
       "name": "Playa Flamenco",
+      "category": "beach",
       "lat": 18.3280301,
       "lng": -65.3358813,
       "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
     },
-     {
+    {
       "name": "Tamarindo Beach",
+      "category": "beach",
       "lat": 18.3179129,
       "lng": -65.3912512,
       "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
     },
     {
       "name": "Malones Beach",
+      "category": "beach",
       "lat": 18.3031684,
       "lng": -65.3128741,
       "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
     },
     {
       "name": "Playa Dátiles",
+      "category": "beach",
       "lat": 18.2961511,
       "lng": -65.3032101,
       "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
     },
     {
       "name": "Playa Zoni",
+      "category": "beach",
       "lat": 18.3197313,
       "lng": -65.2757021,
       "description": "Camp Today!: <a href='https://www.culebracamping.com/' target='_blank'>https://www.culebracamping.com/</a>"
     }
   ]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
