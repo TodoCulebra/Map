@@ -93,6 +93,24 @@
       font-size: 12px; font-weight: 500; color: rgba(241,245,249,0.85);
     }
 
+    /* ══════════════════════════════════════════════
+       GRID OVERLAY
+    ══════════════════════════════════════════════ */
+    #btn-grid.active { background: var(--accent); color: #062b27; }
+    .grid-cell-label {
+      background: rgba(11,34,64,0.82);
+      color: #00c2a8;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: var(--font-ui);
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,194,168,0.4);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 0.04em;
+    }
+
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -444,6 +462,7 @@
   <div id="left-stack">
     <button class="stack-btn" onclick="map.flyTo([18.310, -65.302], 13)" title="Home">🏠</button>
     <button id="btn-locate" class="stack-btn" title="My Location" onclick="locateMe()">📍</button>
+    <button id="btn-grid" class="stack-btn" title="Toggle Grid" onclick="toggleGrid()" style="font-size:16px;">⊞</button>
   </div>
 
   <!-- Category pill bar -->
@@ -726,6 +745,7 @@ async function loadLocations() {
           '<div class="popup-title">' + (name||'Unnamed') + '</div>' +
           '<div class="popup-type-row">' +
             '<span class="popup-type-tag" style="background:' + color + '22;color:' + color + '">' + catName + '</span>' +
+            (loc.cell ? '<span style="font-size:10px;font-weight:700;color:#6b7280;background:#f3f4f6;padding:2px 7px;border-radius:999px;margin-left:4px;">⊞ ' + loc.cell + '</span>' : '') +
           '</div>' +
           '<div class="dist-badge" id="distbadge-' + idx + '">📍 calculating…</div>' +
           '<div class="popup-desc">' + desc + '</div>' +
@@ -953,6 +973,167 @@ function shareLocation(name, lat, lng, btn) {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   GRID OVERLAY — 500×500 node matrix
+   Columns: A → SG (Excel-style)  |  Rows: 1 → 500 (top = north)
+   Bounding box: encompasses Culebra, Cayo Norte, Luis Peña, Culebrita
+══════════════════════════════════════════════════════════════════ */
+var GRID = {
+  north:  18.350,
+  south:  18.265,
+  west:  -65.380,
+  east:  -65.215,
+  rows:   500,
+  cols:   500
+};
+GRID.cellLat = (GRID.north - GRID.south) / GRID.rows;
+GRID.cellLng = (GRID.east  - GRID.west)  / GRID.cols;
+
+var gridActive   = false;
+var gridLines    = [];
+var gridLabels   = [];
+var gridVisible  = false;
+
+function colName(n) {  // 0-indexed → Excel column letters
+  var result = '', idx = n + 1;
+  while (idx > 0) {
+    var r = (idx - 1) % 26;
+    result = String.fromCharCode(65 + r) + result;
+    idx = Math.floor((idx - 1) / 26);
+  }
+  return result;
+}
+
+function snapToCell(lat, lng) {
+  var ci = Math.max(0, Math.min(GRID.cols, Math.round((lng - GRID.west)  / GRID.cellLng)));
+  var ri = Math.max(0, Math.min(GRID.rows, Math.round((GRID.north - lat) / GRID.cellLat)));
+  return {
+    col: colName(ci), row: ri + 1,
+    cell: colName(ci) + (ri + 1),
+    lat: GRID.north - ri * GRID.cellLat,
+    lng: GRID.west  + ci * GRID.cellLng
+  };
+}
+
+/* Draw adaptive grid — step size depends on zoom level */
+function drawGrid() {
+  clearGridLayers();
+  var zoom = map.getZoom();
+  var bounds = map.getBounds();
+
+  /* At low zoom draw coarser grid; at high zoom draw fine grid */
+  var step;
+  if      (zoom >= 15) step = 1;
+  else if (zoom >= 14) step = 2;
+  else if (zoom >= 13) step = 5;
+  else if (zoom >= 12) step = 10;
+  else if (zoom >= 11) step = 25;
+  else                 step = 50;
+
+  /* Clamp to visible bounding box */
+  var latMin = Math.max(GRID.south, bounds.getSouth() - GRID.cellLat * step);
+  var latMax = Math.min(GRID.north, bounds.getNorth() + GRID.cellLat * step);
+  var lngMin = Math.max(GRID.west,  bounds.getWest()  - GRID.cellLng * step);
+  var lngMax = Math.min(GRID.east,  bounds.getEast()  + GRID.cellLng * step);
+
+  /* Row indices within view */
+  var rowStart = Math.max(0, Math.floor((GRID.north - latMax) / GRID.cellLat));
+  var rowEnd   = Math.min(GRID.rows, Math.ceil((GRID.north - latMin) / GRID.cellLat));
+  var colStart = Math.max(0, Math.floor((lngMin - GRID.west) / GRID.cellLng));
+  var colEnd   = Math.min(GRID.cols, Math.ceil((lngMax - GRID.west) / GRID.cellLng));
+
+  /* Snap starts to step multiples */
+  rowStart = Math.floor(rowStart / step) * step;
+  colStart = Math.floor(colStart / step) * step;
+
+  var lineOpts = { color:'rgba(0,194,168,0.35)', weight:0.6, interactive:false };
+  var showLabels = zoom >= 13;
+
+  /* Horizontal lines (constant lat) */
+  for (var ri = rowStart; ri <= rowEnd; ri += step) {
+    var lat = GRID.north - ri * GRID.cellLat;
+    if (lat < GRID.south || lat > GRID.north) continue;
+    var line = L.polyline([[lat, GRID.west],[lat, GRID.east]], lineOpts);
+    gridLines.push(line);
+    line.addTo(map);
+  }
+
+  /* Vertical lines (constant lng) */
+  for (var ci = colStart; ci <= colEnd; ci += step) {
+    var lng = GRID.west + ci * GRID.cellLng;
+    if (lng < GRID.west || lng > GRID.east) continue;
+    var vline = L.polyline([[GRID.north, lng],[GRID.south, lng]], lineOpts);
+    gridLines.push(vline);
+    vline.addTo(map);
+
+    /* Node labels at intersections when zoomed in */
+    if (showLabels) {
+      for (var lri = rowStart; lri <= rowEnd; lri += step) {
+        var llat = GRID.north - lri * GRID.cellLat;
+        if (llat < GRID.south || llat > GRID.north) continue;
+        var cellAddr = colName(ci) + (lri + 1);
+        var icon = L.divIcon({
+          html: '<div class="grid-cell-label">' + cellAddr + '</div>',
+          className: '', iconSize: null, iconAnchor: [0, 0]
+        });
+        var lbl = L.marker([llat, lng], { icon:icon, interactive:false, zIndexOffset:-999 });
+        gridLabels.push(lbl);
+        lbl.addTo(map);
+      }
+    }
+  }
+
+  /* Outer bounding box — highlighted */
+  var boxOpts = { color:'rgba(0,194,168,0.9)', weight:2, interactive:false, dashArray:'6,4' };
+  var box = L.rectangle([[GRID.south, GRID.west],[GRID.north, GRID.east]], boxOpts);
+  gridLines.push(box);
+  box.addTo(map);
+
+  /* Corner labels always visible */
+  var corners = [
+    { lat:GRID.north, lng:GRID.west,  label:'A1' },
+    { lat:GRID.north, lng:GRID.east,  label:'SG1' },
+    { lat:GRID.south, lng:GRID.west,  label:'A500' },
+    { lat:GRID.south, lng:GRID.east,  label:'SG500' }
+  ];
+  corners.forEach(function(c) {
+    var ci = L.divIcon({
+      html: '<div class="grid-cell-label" style="font-size:10px;padding:2px 6px;border-color:rgba(0,194,168,0.9);">' + c.label + '</div>',
+      className: '', iconSize: null, iconAnchor: [0, 0]
+    });
+    var m = L.marker([c.lat, c.lng], { icon:ci, interactive:false });
+    gridLabels.push(m);
+    m.addTo(map);
+  });
+}
+
+function clearGridLayers() {
+  gridLines.forEach(function(l){ if(map.hasLayer(l)) map.removeLayer(l); });
+  gridLabels.forEach(function(l){ if(map.hasLayer(l)) map.removeLayer(l); });
+  gridLines = []; gridLabels = [];
+}
+
+function toggleGrid() {
+  var btn = document.getElementById('btn-grid');
+  gridActive = !gridActive;
+  if (gridActive) {
+    btn.classList.add('active');
+    btn.title = 'Hide Grid';
+    drawGrid();
+    map.on('moveend zoomend', drawGrid);
+    showToast('⊞ Grid on — nodes labeled A1 → SG500');
+  } else {
+    btn.classList.remove('active');
+    btn.title = 'Show Grid';
+    clearGridLayers();
+    map.off('moveend zoomend', drawGrid);
+    showToast('⊞ Grid off');
+  }
+}
+
+/* Expose cell lookup globally for popups / future use */
+window.snapToCell = snapToCell;
+
+/* ══════════════════════════════════════════════════════════════════
    TAP RIPPLE
 ══════════════════════════════════════════════════════════════════ */
 function spawnRipple(x,y) {
@@ -1065,4 +1246,3 @@ document.addEventListener('touchstart',function(e){ if(e.touches.length===1) spa
 </script>
 </body>
 </html>
-
