@@ -982,8 +982,8 @@ var GRID = {
   south:  18.265,
   west:  -65.380,
   east:  -65.215,
-  rows:   500,
-  cols:   500
+  rows:   50,
+  cols:   50
 };
 GRID.cellLat = (GRID.north - GRID.south) / GRID.rows;
 GRID.cellLng = (GRID.east  - GRID.west)  / GRID.cols;
@@ -1091,9 +1091,9 @@ function drawGrid() {
   /* Corner labels always visible */
   var corners = [
     { lat:GRID.north, lng:GRID.west,  label:'A1' },
-    { lat:GRID.north, lng:GRID.east,  label:'SG1' },
-    { lat:GRID.south, lng:GRID.west,  label:'A500' },
-    { lat:GRID.south, lng:GRID.east,  label:'SG500' }
+    { lat:GRID.north, lng:GRID.east,  label:'AY1' },
+    { lat:GRID.south, lng:GRID.west,  label:'A50' },
+    { lat:GRID.south, lng:GRID.east,  label:'AY50' }
   ];
   corners.forEach(function(c) {
     var ci = L.divIcon({
@@ -1120,7 +1120,7 @@ function toggleGrid() {
     btn.title = 'Hide Grid';
     drawGrid();
     map.on('moveend zoomend', drawGrid);
-    showToast('⊞ Grid on — nodes labeled A1 → SG500');
+    showToast('⊞ Grid on — nodes labeled A1 → AY50');
   } else {
     btn.classList.remove('active');
     btn.title = 'Show Grid';
