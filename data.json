@@ -84,10 +84,10 @@
       "name": "Tamarindo Beach",
       "category": "beach",
       "lat": 18.3177,
-      "lng": -65.3305,
+      "lng": -65.3173,
       "description": "One of the Caribbean's premier snorkel beaches. Swim alongside sea turtles, spotted eagle rays, and parrotfish in gin-clear water. Calm and shallow — perfect for all ages. <a href='https://www.shopculebra.com' target='_blank'>Book a guided snorkel tour at ShopCulebra.com</a>",
-      "cell": "P20",
-      "grid_col": "P",
+      "cell": "T20",
+      "grid_col": "T",
       "grid_row": 20
     },
     {
