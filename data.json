@@ -1,60 +1,157 @@
 {
   "locations": [
+
     {
       "name": "Todo Culebra Plaza Hub",
       "category": "hub",
       "lat": 18.3012,
       "lng": -65.30213,
-      "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
+      "description": "Your one-stop hub in Culebra! Order food delivery, snorkel tours, e-bike rentals, and more. <a href='https://www.shopculebra.com' target='_blank'>Shop at ShopCulebra.com</a>"
     },
+
+    {
+      "name": "Hector El Protector",
+      "category": "hub",
+      "lat": 18.3007,
+      "lng": -65.3022,
+      "description": "Culebra's beloved guardian troll, hand-carved from a fallen tree by Danish artist Thomas Dambo in 2014. Destroyed by Hurricane Maria in 2017 and lovingly rebuilt by the local community. Hector watches over the island and everyone on it. Stop by, say hello, and snap a photo — he loves the attention. 🧌"
+    },
+
     {
       "name": "Zaco's Tacos Restaurant",
       "category": "food",
       "lat": 18.300,
       "lng": -65.2955823,
-      "description": "ORDER HERE: <a href='https://www.zacostacos.com' target='_blank'>https://www.zacostacos.com</a>"
+      "description": "Culebra's most beloved taco spot. Fresh ingredients, bold flavors, and a laid-back vibe that keeps locals and visitors coming back. Don't leave the island without trying the fish tacos. <a href='https://www.shopculebra.com' target='_blank'>Order delivery at ShopCulebra.com</a>"
     },
+
     {
-      "name": "Kokomo Hotel",
-      "category": "hotel",
-      "lat": 18.29,
-      "lng": -65.30213,
-      "description": "ORDER HERE: <a href='https://www.shopculebra.com' target='_blank'>www.shopculebra.com</a>"
+      "name": "Mamacita's Restaurant & Bar",
+      "category": "food",
+      "lat": 18.3016,
+      "lng": -65.3027,
+      "description": "An iconic Culebra institution right on the canal. Famous for the frozen painkiller cocktail and perfectly grilled fish. Watch the boats drift by while you sip — this is island life at its finest. <a href='https://www.shopculebra.com' target='_blank'>Order delivery at ShopCulebra.com</a>"
     },
+
+    {
+      "name": "Dinghy Dock Restaurant",
+      "category": "food",
+      "lat": 18.3022,
+      "lng": -65.3025,
+      "description": "Perched right over the water with tarpon swimming beneath your feet. Cold drinks, fresh seafood, and some of the best sunsets on the island. A true Culebra classic. <a href='https://www.shopculebra.com' target='_blank'>Order delivery at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Heather's Pizza",
+      "category": "food",
+      "lat": 18.3012,
+      "lng": -65.3022,
+      "description": "Hands down the best pizza on the island. Wood-fired with fresh, generous toppings and a perfectly crispy crust. Opens at 5pm — get there early or expect a wait. Worth every minute. <a href='https://www.shopculebra.com' target='_blank'>Order delivery at ShopCulebra.com</a>"
+    },
+
     {
       "name": "Playa Flamenco",
       "category": "beach",
       "lat": 18.3280301,
       "lng": -65.3358813,
-      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+      "description": "Consistently ranked one of the top 10 beaches in the world. Powder-white sand, crystal-clear turquoise water, and two iconic WWII tanks tucked behind the dunes. Facilities, food kiosks, and chair rentals on-site. An absolute must. <a href='https://www.shopculebra.com' target='_blank'>Plan your day at ShopCulebra.com</a>"
     },
+
     {
       "name": "Tamarindo Beach",
       "category": "beach",
       "lat": 18.3179129,
-      "lng": -65.3912512,
-      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+      "lng": -65.3312512,
+      "description": "One of the Caribbean's premier snorkel beaches. Swim alongside sea turtles, spotted eagle rays, and parrotfish in gin-clear water. Calm and shallow — perfect for all ages. Arrive early before the wind picks up. <a href='https://www.shopculebra.com' target='_blank'>Book a guided snorkel tour at ShopCulebra.com</a>"
     },
+
     {
       "name": "Malones Beach",
       "category": "beach",
       "lat": 18.3031684,
       "lng": -65.3128741,
-      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+      "description": "A hidden gem tucked along the marine reserve. Incredible reef snorkeling just steps from shore — fish, turtles, and rays in abundance. Short walk from town, rarely crowded, and absolutely stunning. <a href='https://www.shopculebra.com' target='_blank'>Rent snorkel gear at ShopCulebra.com</a>"
     },
+
     {
       "name": "Playa Dátiles",
       "category": "beach",
       "lat": 18.2961511,
       "lng": -65.3032101,
-      "description": "ORDER HERE: <a href='https://www.snorkelwithlocals.com/' target='_blank'>https://www.snorkelwithlocals.com/</a>"
+      "description": "Locals call it the most romantic beach on the island. Sweeping views of Cayo Luis Peña, Vieques, and El Yunque on a clear day. Requires a 4x4 or e-bike to reach — no golf carts allowed. Bring water and sunscreen, there is no shade. <a href='https://www.shopculebra.com' target='_blank'>Rent an e-bike at ShopCulebra.com</a>"
     },
+
     {
       "name": "Playa Zoni",
       "category": "beach",
       "lat": 18.3197313,
       "lng": -65.2757021,
-      "description": "Camp Today!: <a href='https://www.culebracamping.com/' target='_blank'>https://www.culebracamping.com/</a>"
+      "description": "A long, wild, undeveloped stretch on the east end of the island. Stunning views of Culebrita, Cayo Norte, and St. Thomas on the horizon. Sea turtle nesting ground — keep your eyes open at dawn and dusk. <a href='https://www.culebracamping.com/' target='_blank'>Camp right on the beach at culebracamping.com</a>"
+    },
+
+    {
+      "name": "Punta Soldado",
+      "category": "beach",
+      "lat": 18.2819,
+      "lng": -65.2866,
+      "description": "The southernmost beach on Culebra and one of its most dramatic. Rocky shoreline, powerful waves, and jaw-dropping views of Vieques across the channel. Best for experienced snorkelers — strong currents possible. 4x4 or e-bike only. <a href='https://www.shopculebra.com' target='_blank'>Rent an e-bike at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Playa Carlos Rosario",
+      "category": "beach",
+      "lat": 18.3215,
+      "lng": -65.3278,
+      "description": "A well-kept secret accessible only by boat or a scenic hike through the nature reserve. Pristine reef just offshore — among the best snorkeling on the entire island. No facilities, no crowds, just pure Culebra. <a href='https://www.shopculebra.com' target='_blank'>Book a water taxi at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Playa Melones",
+      "category": "beach",
+      "lat": 18.3035,
+      "lng": -65.3102,
+      "description": "A short walk from town and absolutely worth it. The reef starts just a few feet from shore — strap on a mask and you are instantly surrounded by tropical fish. Great sunset spot too. Popular with locals for an after-work swim. <a href='https://www.shopculebra.com' target='_blank'>Rent snorkel gear at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Isla Culebrita",
+      "category": "beach",
+      "lat": 18.3187,
+      "lng": -65.2272,
+      "description": "A tiny uninhabited island off the east coast with natural tidal pools (the famous jacuzzis!), a historic lighthouse, and some of the clearest water in the Caribbean. Sea turtles and rays are regulars. Boat access only — about 15 minutes from Dewey. <a href='https://www.shopculebra.com' target='_blank'>Book your boat trip at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Playa Brava",
+      "category": "beach",
+      "lat": 18.3318,
+      "lng": -65.3245,
+      "description": "Wild and windswept on the north coast — accessible by hiking trail from Flamenco or by boat. No facilities, no people, just raw Caribbean coastline. Strong surf makes it ideal for experienced swimmers and those who just want to feel the power of the ocean. <a href='https://www.shopculebra.com' target='_blank'>Plan your adventure at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Snorkel With Locals",
+      "category": "activity",
+      "lat": 18.3018,
+      "lng": -65.3015,
+      "description": "The best way to see Culebra underwater. Local guides take small groups to secret snorkel spots most tourists never find — turtles, rays, nurse sharks, and vibrant coral reefs. All gear included, all levels welcome. <a href='https://www.shopculebra.com' target='_blank'>Book your tour at ShopCulebra.com</a>"
+    },
+
+    {
+      "name": "Culebra Camping at Playa Zoni",
+      "category": "activity",
+      "lat": 18.3205,
+      "lng": -65.2748,
+      "description": "Fall asleep to the sound of waves and wake up to a Caribbean sunrise. Camping right on Playa Zoni — one of the most peaceful and untouched spots on the island. Tent sites available, gear rental on-site. <a href='https://www.culebracamping.com/' target='_blank'>Reserve your spot at culebracamping.com</a>"
+    },
+
+    {
+      "name": "Kokomo Hotel",
+      "category": "hotel",
+      "lat": 18.29,
+      "lng": -65.30213,
+      "description": "Comfortable island accommodation in the heart of Culebra. <a href='https://www.shopculebra.com' target='_blank'>Order food delivery to your room at ShopCulebra.com</a>"
     }
+
   ]
 }
