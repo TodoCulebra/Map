@@ -1,90 +1,96 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-  />
-  <title>Todo Culebra • Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>InCulebra • Map</title>
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="anonymous"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin="anonymous"></script>
+  <!-- Routing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.css" crossorigin="anonymous"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js" crossorigin="anonymous"></script>
+  <!-- MarkerCluster -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" crossorigin="anonymous"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js" crossorigin="anonymous"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
 
   <style>
+    /* ── DESIGN TOKENS ── */
     :root {
-      --bg: #0b1220;         /* deep navy */
-      --fg: #f1f5f9;         /* near-white */
-      --accent: #00c2a8;     /* teal accent */
+      --bg:          #0b1220;
+      --fg:          #f1f5f9;
+      --accent:      #00c2a8;
       --accent-dark: #009883;
+      --c-ocean:     #006994;
+      --c-aqua:      #00a0b0;
+      --c-navy:      #0b2240;
+      --c-sand:      #f5f0e8;
+      --c-white:     #ffffff;
+      --c-text:      #1a1a2e;
+      --c-muted:     #6b7280;
+      --c-green:     #10b981;
+      --c-amber:     #f59e0b;
+      --c-red:       #ef4444;
+      --radius:      14px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.14);
+      --font-ui:     'DM Sans', system-ui, -apple-system, sans-serif;
     }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: var(--font-ui); }
 
-    /* Reset and layout */
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    /* Welcome screen styles */
-    .welcome {
-      position: fixed;
-      inset: 0; /* top/right/bottom/left: 0 */
-      display: grid;
-      place-items: center;
+    /* ══════════════════════════════════════════════
+       WELCOME SCREEN
+    ══════════════════════════════════════════════ */
+    #welcome {
+      position: fixed; inset: 0; display: grid; place-items: center;
       background: radial-gradient(1200px 800px at 30% 20%, #13203a, var(--bg));
       z-index: 9999;
     }
-
     .welcome-inner {
-      text-align: center;
-      max-width: 720px;
-      padding: 24px;
+      text-align: center; max-width: 720px; padding: 24px;
       animation: fadeInUp 600ms ease both;
     }
-
     .brand {
-      font-size: 2.25rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
+      font-size: 2.25rem; font-weight: 700; letter-spacing: 0.5px;
+      margin-bottom: 10px; color: var(--fg);
     }
-
     .tagline {
-      font-size: 1.05rem;
-      opacity: 0.85;
-      margin-bottom: 26px;
+      font-size: 1.05rem; opacity: 0.85; margin-bottom: 26px; color: var(--fg);
     }
-
     .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 22px;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #062b27;
-      font-weight: 700;
-      font-size: 1.05rem;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 6px 16px rgba(0, 194, 168, 0.35);
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 22px; border-radius: 10px;
+      background: var(--accent); color: #062b27;
+      font-weight: 700; font-size: 1.05rem; font-family: var(--font-ui);
+      border: none; cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,194,168,0.35);
       transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
-    .cta:focus { outline: 2px solid #82efe0; outline-offset: 3px; }
     .cta:hover { transform: translateY(-1px); background: var(--accent-dark); }
-    .cta:active { transform: translateY(0); box-shadow: 0 3px 10px rgba(0, 194, 168, 0.28); }
+    .cta:active { transform: translateY(0); box-shadow: 0 3px 10px rgba(0,194,168,0.28); }
+    .supporting { margin-top: 18px; font-size: 0.95rem; opacity: 0.8; color: var(--fg); }
+    .welcome-footer {
+      position: fixed; bottom: 14px; width: 100%;
+      text-align: center; font-size: 0.9rem; opacity: 0.6; color: var(--fg);
+    }
+    .welcome-link { color: #80ffe9; text-decoration: none; }
+    .welcome-link:hover { text-decoration: underline; }
 
-    .supporting {
-      margin-top: 18px;
-      font-size: 0.95rem;
-      opacity: 0.8;
+    /* Feature pills on welcome screen */
+    .feature-pills {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; margin: 0 0 28px;
+    }
+    .feature-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 13px; border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 12px; font-weight: 500; color: rgba(241,245,249,0.85);
     }
 
     @keyframes fadeInUp {
@@ -92,205 +98,971 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Map container (initially hidden) */
-    #map {
-      height: 100vh;
-      width: 100%;
-      display: none; /* hidden until user clicks */
+    /* ══════════════════════════════════════════════
+       MAP CONTAINER
+    ══════════════════════════════════════════════ */
+    body { background: #e8f4f8; }
+    #map-wrap {
+      position: fixed; inset: 0;
+      display: none; flex-direction: column;
+    }
+    #map-wrap.visible { display: flex; }
+    #map { flex: 1; min-height: 0; width: 100%; }
+
+    /* ══════════════════════════════════════════════
+       WELCOME BADGE (on map)
+    ══════════════════════════════════════════════ */
+    .welcome-badge {
+      position: absolute; top: 12px; left: 50%;
+      transform: translateX(-50%); z-index: 1001;
+      background: linear-gradient(135deg, var(--c-navy), #1a4a7a);
+      color: #fff; padding: 7px 20px;
+      font-size: 13px; font-weight: 600; border-radius: 999px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      white-space: nowrap; pointer-events: none;
+      letter-spacing: 0.02em;
     }
 
-    /* Emoji marker styling */
-    .emoji-marker {
-      font-size: 34px;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-      line-height: 1;
-      user-select: none;
+    /* ══════════════════════════════════════════════
+       TOP SEARCH BAR
+    ══════════════════════════════════════════════ */
+    #topbar {
+      position: absolute; top: 12px; left: 12px; z-index: 1002;
+      width: min(280px, calc(100vw - 24px));
+      pointer-events: none;
+    }
+    #search-outer { display: flex; align-items: center; pointer-events: all; }
+    #search-card {
+      flex: 1; display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 14px; padding: 0 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.6);
+      height: 44px; transition: box-shadow 0.2s;
+    }
+    #search-card:focus-within { box-shadow: 0 2px 20px rgba(0,105,148,0.28); }
+    #search-icon { color: var(--c-muted); font-size: 15px; flex-shrink: 0; }
+    #search-input {
+      border: none; outline: none; background: transparent;
+      font-family: var(--font-ui); font-size: 14px; font-weight: 400;
+      color: var(--c-text); flex: 1; min-width: 0;
+    }
+    #search-input::placeholder { color: #aaa; }
+    #search-clear {
+      display: none; background: #e0e0e0; border: none; border-radius: 50%;
+      width: 20px; height: 20px; font-size: 11px; cursor: pointer; color: #555;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      font-weight: 700; line-height: 1;
+    }
+    #search-clear.visible { display: flex; }
+    #search-results {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: var(--c-white); border-radius: 14px;
+      box-shadow: var(--shadow); overflow: hidden; display: none;
+      pointer-events: all; max-height: 60vh; overflow-y: auto;
+    }
+    .search-result-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; font-size: 14px; color: var(--c-text);
+      cursor: pointer; border-bottom: 1px solid #f3f3f3;
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: #f0f8ff; }
+    .sri-icon { font-size: 16px; flex-shrink: 0; }
+    .sri-name { font-weight: 600; font-size: 14px; }
+    .sri-type { font-size: 11px; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ══════════════════════════════════════════════
+       LEFT BUTTON STACK
+    ══════════════════════════════════════════════ */
+    #left-stack {
+      position: absolute; left: 12px; z-index: 1001;
+      display: flex; flex-direction: column; gap: 8px;
+      top: 68px;
+    }
+    .stack-btn {
+      width: 44px; height: 44px; border-radius: 12px; border: none;
+      background: var(--c-navy); color: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .stack-btn:hover { background: #1a4a7a; }
+    #btn-locate.locating { animation: locatePulse 1.2s infinite; }
+    @keyframes locatePulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+
+    /* ══════════════════════════════════════════════
+       CATEGORY PILL BAR
+    ══════════════════════════════════════════════ */
+    #cat-bar {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+      display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      transition: transform 0.34s cubic-bezier(0.4,0,0.2,1);
+    }
+    #cat-bar::-webkit-scrollbar { display: none; }
+    #cat-bar.hidden { transform: translateY(100%); }
+    .cat-pill {
+      display: flex; align-items: center; gap: 6px; white-space: nowrap;
+      padding: 8px 14px; border-radius: 999px;
+      border: 1.5px solid rgba(0,0,0,0.12);
+      background: var(--c-white); color: var(--c-text);
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      cursor: pointer; flex-shrink: 0;
+      transition: all 0.18s ease; -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .cat-pill:hover  { border-color: var(--c-ocean); color: var(--c-ocean); }
+    .cat-pill.active { background: var(--c-ocean); border-color: var(--c-ocean); color: #fff; box-shadow: 0 2px 10px rgba(0,105,148,0.4); }
+    .cat-pill .pill-icon { font-size: 15px; }
+
+    /* ══════════════════════════════════════════════
+       POPUP STYLES
+    ══════════════════════════════════════════════ */
+    .leaflet-popup-content-wrapper {
+      background: var(--c-white); border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18); padding: 0; overflow: hidden; border: none;
+    }
+    .leaflet-popup-tip { background: var(--c-white); }
+    .leaflet-popup-content { margin: 0; font-family: var(--font-ui); font-size: 13px; line-height: 1.5; min-width: 260px; max-width: 310px; }
+    .popup-img { width: 100%; height: 135px; object-fit: cover; display: block; }
+    .popup-body { padding: 13px 15px 15px; }
+    .popup-title { font-size: 16px; font-weight: 700; color: var(--c-text); margin-bottom: 4px; }
+    .popup-type-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .popup-type-tag {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 2px 7px; border-radius: 999px;
+    }
+    .popup-desc { font-size: 12.5px; color: #555; margin-bottom: 10px; line-height: 1.55; }
+    .popup-desc a { color: var(--c-ocean); }
+    .dist-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; color: var(--c-ocean);
+      background: rgba(0,105,148,0.1); border-radius: 999px;
+      padding: 3px 8px; margin-bottom: 8px;
+    }
+    .btn-directions {
+      display: block; width: 100%; padding: 10px 0;
+      background: linear-gradient(135deg, var(--c-ocean), var(--c-aqua)); color: #fff;
+      border: none; border-radius: 10px;
+      font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+      cursor: pointer; text-align: center; transition: opacity 0.15s;
+      margin-bottom: 6px;
+    }
+    .btn-directions:hover { opacity: 0.88; }
+    .btn-directions:disabled { background: #ccc; cursor: not-allowed; opacity: 1; }
+    .btn-share {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 9px 0;
+      background: transparent; color: var(--c-ocean);
+      border: 1.5px solid var(--c-ocean); border-radius: 8px;
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; margin-top: 6px;
+    }
+    .btn-share:hover { background: rgba(0,105,148,0.06); }
+    .btn-share.copied { background: var(--c-green); border-color: var(--c-green); color: #fff; }
+    .route-status { font-size: 11px; color: var(--c-muted); text-align: center; margin-top: 4px; min-height: 16px; }
+    .route-status.error { color: var(--c-red); }
+    .fallback-row { display: none; gap: 6px; margin-top: 6px; }
+    .fallback-row.visible { display: flex; }
+    .btn-fallback { flex: 1; padding: 8px 0; border: none; border-radius: 9px; font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; color: #fff; transition: opacity 0.15s; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .btn-fallback:hover { opacity: 0.85; }
+    .btn-apple  { background: #1c1c1e; }
+    .btn-google { background: #4285F4; }
+
+    /* ══════════════════════════════════════════════
+       TURN-BY-TURN PANEL
+    ══════════════════════════════════════════════ */
+    #turn-panel {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 1000;
+      background: var(--c-white); border-radius: 20px 20px 0 0;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.14); padding-bottom: 16px;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+      max-height: 52vh; display: flex; flex-direction: column;
+    }
+    #turn-panel.open { transform: translateY(0); }
+    #turn-handle { width: 36px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+    #turn-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px 8px; flex-shrink: 0; border-bottom: 1px solid #f0f0f0; }
+    #turn-title  { font-size: 15px; font-weight: 700; color: var(--c-text); }
+    #turn-meta   { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
+    #turn-close  { background: #f0f0f0; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
+    #turn-steps  { overflow-y: auto; padding: 8px 0 20px; flex: 1; }
+    .turn-step   { display: flex; align-items: flex-start; gap: 10px; padding: 8px 16px; border-bottom: 1px solid #f5f5f5; font-size: 13px; color: var(--c-text); line-height: 1.4; }
+    .turn-step:last-child { border-bottom: none; }
+    .turn-icon   { font-size: 17px; flex-shrink: 0; width: 22px; text-align: center; margin-top: 1px; }
+    .turn-dist   { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+
+    /* ══════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════ */
+    #toast {
+      position: absolute; top: 78px; left: 50%; transform: translateX(-50%);
+      z-index: 2000; background: var(--c-text); color: #fff;
+      padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3); white-space: nowrap;
+      opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ══════════════════════════════════════════════
+       USER DOT
+    ══════════════════════════════════════════════ */
+    .user-dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #2f80ff; border: 3px solid #fff;
+      box-shadow: 0 0 0 4px rgba(47,128,255,0.3), 0 0 0 8px rgba(47,128,255,0.1);
+      animation: gpsRing 2s infinite;
+    }
+    @keyframes gpsRing {
+      0%,100% { box-shadow: 0 0 0 4px rgba(47,128,255,0.3), 0 0 0 8px rgba(47,128,255,0.1); }
+      50%      { box-shadow: 0 0 0 6px rgba(47,128,255,0.4), 0 0 0 14px rgba(47,128,255,0.15); }
     }
 
-    /* Small helper: subtle footer link on welcome */
-    .welcome-footer {
-      position: fixed;
-      bottom: 14px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
-      opacity: 0.6;
+    /* ══════════════════════════════════════════════
+       LEAFLET OVERRIDES
+    ══════════════════════════════════════════════ */
+    .leaflet-control-zoom { border-radius: 12px !important; overflow: hidden; border: none !important; box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important; }
+    .leaflet-control-zoom a { font-size: 18px !important; width: 36px !important; height: 36px !important; line-height: 36px !important; color: var(--c-text) !important; background: rgba(255,255,255,0.97) !important; border: none !important; font-weight: 300 !important; }
+    .leaflet-control-zoom a:hover { background: #f0f8ff !important; }
+    .leaflet-routing-container { display: none !important; }
+    .leaflet-control-attribution { font-size: 10px !important; background: rgba(255,255,255,0.75) !important; backdrop-filter: blur(4px) !important; border-radius: 6px 0 0 0 !important; }
+    .marker-cluster { background: transparent !important; }
+    .marker-cluster div { background: transparent !important; }
+    .leaflet-control-custom button {
+      background: rgba(255,255,255,0.97); border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 10px; width: 36px; height: 36px; cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin: 2px;
     }
 
-    .link {
-      color: #80ffe9;
-      text-decoration: none;
+    /* ══════════════════════════════════════════════
+       EASTER EGG OVERLAY
+    ══════════════════════════════════════════════ */
+    #ee-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(ellipse at 50% 100%, #001a3a 0%, #000d1f 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.6s;
     }
-    .link:hover { text-decoration: underline; }
+    #ee-overlay.show { opacity: 1; pointer-events: all; }
+    #ee-overlay canvas { position: absolute; inset: 0; }
+    #ee-msg { position: relative; z-index: 2; text-align: center; color: #fff; text-shadow: 0 2px 12px rgba(0,200,255,0.5); font-family: 'DM Serif Display', serif; }
+    #ee-msg h2 { font-size: clamp(24px,6vw,48px); margin: 0 0 8px; }
+    #ee-msg p  { font-size: clamp(13px,3vw,18px); opacity: 0.75; margin: 0 0 24px; font-family: var(--font-ui); }
+    #ee-close  { position: relative; z-index: 2; padding: 12px 32px; border-radius: 999px; border: 2px solid rgba(255,255,255,0.4); background: transparent; color: #fff; font-family: var(--font-ui); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    #ee-close:hover { background: rgba(255,255,255,0.15); }
+
+    /* ══════════════════════════════════════════════
+       MOBILE TAP RIPPLE
+    ══════════════════════════════════════════════ */
+    .tap-ripple {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998;
+      background: radial-gradient(circle, rgba(0,160,176,0.5) 0%, transparent 70%);
+      transform: scale(0); animation: rippleOut 0.6s ease-out forwards;
+    }
+    @keyframes rippleOut { to { transform: scale(4); opacity: 0; } }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (min-width: 768px) {
+      #turn-panel {
+        left: auto !important; right: 16px !important; bottom: 16px !important;
+        width: 340px; border-radius: 18px !important; max-height: calc(100vh - 80px) !important;
+        transform: translateX(120%) !important;
+      }
+      #turn-panel.open { transform: translateX(0) !important; }
+    }
+    @media (max-width: 767px) {
+      .leaflet-control-zoom { bottom: 80px !important; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Welcome Screen -->
-  <section class="welcome" id="welcome" aria-labelledby="welcome-title" role="dialog" aria-modal="true">
-    <div class="welcome-inner">
-      <h1 class="brand" id="welcome-title">Welcome to InCulebra</h1>
-      <p class="tagline">Explore spots, hubs, restaurants, and more across Culebra.</p>
+<!-- ══════════════════════════════════════════════
+     WELCOME SCREEN
+══════════════════════════════════════════════ -->
+<section id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+  <div class="welcome-inner">
+    <h1 class="brand" id="welcome-title">Welcome to InCulebra</h1>
+    <p class="tagline">Explore spots, restaurants, beaches, and more across Culebra.</p>
 
-      <button class="cta" id="showMapBtn" type="button" aria-controls="map" aria-expanded="false">
-        <span>🗺️ Culebra Map</span>
-      </button>
-
-      <p class="supporting">Tap the button to load the interactive map.</p>
+    <div class="feature-pills">
+      <span class="feature-pill">🔍 Search</span>
+      <span class="feature-pill">📂 Filter by category</span>
+      <span class="feature-pill">📍 Locate Me</span>
+      <span class="feature-pill">🗺️ Directions</span>
+      <span class="feature-pill">🌊 Satellite view</span>
     </div>
 
-    <div class="welcome-footer">
-      <span>Powered by OpenStreetMap & Leaflet</span>
-      &nbsp;•&nbsp;
-      <a class="link" href="https://www.shopculebra.com" target="_blank" rel="noopener">Order at ShopCulebra</a>
+    <button class="cta" id="showMapBtn" type="button">
+      <span>🗺️ Open Culebra Map</span>
+    </button>
+
+    <p class="supporting">Tap to load the interactive map.</p>
+  </div>
+
+  <div class="welcome-footer">
+    Powered by OpenStreetMap &amp; Leaflet &nbsp;•&nbsp;
+    <a class="welcome-link" href="https://www.shopculebra.com" target="_blank" rel="noopener">Order at ShopCulebra</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MAP WRAPPER
+══════════════════════════════════════════════ -->
+<div id="map-wrap" role="region" aria-label="Culebra map">
+
+  <!-- Map banner -->
+  <div class="welcome-badge">¡Bienvenidos a Culebra! 🌴 Tap any pin for info &amp; directions</div>
+
+  <!-- Search bar -->
+  <div id="topbar">
+    <div id="search-outer">
+      <div id="search-card">
+        <span id="search-icon">🔍</span>
+        <input id="search-input" type="text" placeholder="Search Culebra…" autocomplete="off"
+          oninput="liveSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch()"/>
+        <button id="search-clear" onclick="clearSearch()" aria-label="Clear">✕</button>
+      </div>
     </div>
-  </section>
+    <div id="search-results"></div>
+  </div>
 
-  <!-- Map -->
-  <div id="map" role="region" aria-label="Culebra map"></div>
+  <!-- Map canvas -->
+  <div id="map"></div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Left button stack -->
+  <div id="left-stack">
+    <button class="stack-btn" onclick="map.flyTo([18.310, -65.302], 13)" title="Home">🏠</button>
+    <button id="btn-locate" class="stack-btn" title="My Location" onclick="locateMe()">📍</button>
+  </div>
 
-  <script>
-    // Remember user's choice to skip welcome next time (optional)
-    const STORAGE_KEY = 'inculebra_skip_welcome';
+  <!-- Category pill bar -->
+  <div id="cat-bar">
+    <button class="cat-pill active" id="pill-all"        onclick="filterMarkers(null)">     <span class="pill-icon">🗺️</span><span>All</span></button>
+    <button class="cat-pill"        id="pill-beach"       onclick="filterMarkers('beach')"> <span class="pill-icon">🏖️</span><span>Beaches</span></button>
+    <button class="cat-pill"        id="pill-food"        onclick="filterMarkers('food')">  <span class="pill-icon">🍽️</span><span>Food</span></button>
+    <button class="cat-pill"        id="pill-activity"    onclick="filterMarkers('activity')"><span class="pill-icon">🤿</span><span>Activities</span></button>
+    <button class="cat-pill"        id="pill-hub"         onclick="filterMarkers('hub')">   <span class="pill-icon">🌴</span><span>Hubs</span></button>
+  </div>
 
-    const welcomeEl = document.getElementById('welcome');
-    const mapEl = document.getElementById('map');
-    const btn = document.getElementById('showMapBtn');
+  <!-- Turn-by-turn panel -->
+  <div id="turn-panel">
+    <div id="turn-handle"></div>
+    <div id="turn-header">
+      <div>
+        <div id="turn-title">Directions</div>
+        <div id="turn-meta"></div>
+      </div>
+      <button id="turn-close" onclick="clearRoute()">✕</button>
+    </div>
+    <div id="turn-steps"></div>
+  </div>
 
-    // If user has visited and clicked before, skip welcome
-    const skipWelcome = localStorage.getItem(STORAGE_KEY) === 'yes';
-    if (skipWelcome) {
-      welcomeEl.style.display = 'none';
-      mapEl.style.display = 'block';
-      btn.setAttribute('aria-expanded', 'true');
-      initMapAndData(); // initialize immediately
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Easter egg ocean overlay -->
+  <div id="ee-overlay">
+    <canvas id="ee-canvas"></canvas>
+    <div id="ee-msg">
+      <h2>🌊 You Found the Deep!</h2>
+      <p>Welcome to the secret ocean depths of Culebra…</p>
+    </div>
+    <button id="ee-close" onclick="closeOceanEE()">Return to Surface 🤿</button>
+  </div>
+
+</div><!-- /map-wrap -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   WELCOME → MAP TRANSITION
+══════════════════════════════════════════════════════════════════ */
+var STORAGE_KEY = 'inculebra_skip_welcome';
+var welcomeEl   = document.getElementById('welcome');
+var mapWrap     = document.getElementById('map-wrap');
+
+function showMap() {
+  welcomeEl.style.display = 'none';
+  mapWrap.classList.add('visible');
+  initMapAndData();
+}
+
+if (localStorage.getItem(STORAGE_KEY) === 'yes') {
+  showMap();
+} else {
+  document.getElementById('showMapBtn').addEventListener('click', function () {
+    localStorage.setItem(STORAGE_KEY, 'yes');
+    showMap();
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MAP GLOBALS
+══════════════════════════════════════════════════════════════════ */
+var map, clusterGroup;
+var userLat = null, userLng = null;
+var userMarker = null, userAccCircle = null;
+var activeRoute = null, watchId = null;
+var activeFilter = null;
+var markerObjects = [];
+var allLocations  = [];
+
+/* ══════════════════════════════════════════════════════════════════
+   CATEGORY AUTO-DETECTION from name keywords
+══════════════════════════════════════════════════════════════════ */
+var CAT_COLORS = {
+  beach:    '#00b4d8',
+  food:     '#f59e0b',
+  activity: '#10b981',
+  hub:      '#7c3aed',
+  hotel:    '#0891b2'
+};
+var CAT_EMOJI = {
+  beach:    '🏖️',
+  food:     '🍽️',
+  activity: '🤿',
+  hub:      '🌴',
+  hotel:    '🏨'
+};
+var CAT_NAMES = {
+  beach:    'Beach',
+  food:     'Restaurant',
+  activity: 'Activity / Tour',
+  hub:      'Hub',
+  hotel:    'Hotel'
+};
+
+function guessCategory(name) {
+  var n = (name || '').toLowerCase();
+  if (n.includes('playa') || n.includes('beach') || n.includes('tamarindo') ||
+      n.includes('zoni') || n.includes('flamenco') || n.includes('datil') ||
+      n.includes('malon'))                          return 'beach';
+  if (n.includes('tacos') || n.includes('pizza') || n.includes('restaurant') ||
+      n.includes('food') || n.includes('bar') || n.includes('cafe'))
+                                                    return 'food';
+  if (n.includes('snorkel') || n.includes('dive') || n.includes('tour') ||
+      n.includes('kayak') || n.includes('activity')) return 'activity';
+  if (n.includes('hotel') || n.includes('resort') || n.includes('inn') ||
+      n.includes('kokomo') || n.includes('villa'))   return 'hotel';
+  if (n.includes('hub') || n.includes('plaza') || n.includes('shopculebra') ||
+      n.includes('todo culebra'))                   return 'hub';
+  return 'hub'; /* fallback */
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PIN ICON BUILDER
+══════════════════════════════════════════════════════════════════ */
+function makePinIcon(type) {
+  var color = CAT_COLORS[type] || '#555';
+  var emoji = CAT_EMOJI[type]  || '📍';
+  var svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="38" height="50" viewBox="0 0 38 50">' +
+      '<defs><filter id="sh' + type + '" x="-40%" y="-20%" width="180%" height="160%">' +
+        '<feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.55)"/>' +
+      '</filter></defs>' +
+      '<path d="M19 1C10.16 1 3 8.16 3 17c0 11.5 16 32 16 32S35 28.5 35 17C35 8.16 27.84 1 19 1z"' +
+        ' fill="' + color + '" stroke="#ffffff" stroke-width="2.5" filter="url(#sh' + type + ')"/>' +
+      '<circle cx="19" cy="17" r="9" fill="rgba(255,255,255,0.22)"/>' +
+      '<text x="19" y="22" text-anchor="middle" font-size="13">' + emoji + '</text>' +
+    '</svg>';
+  return L.divIcon({ html: svg, className: '', iconSize: [38, 50], iconAnchor: [19, 50], popupAnchor: [0, -52] });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════════════ */
+var BOUNDS  = { west: -65.42, east: -65.215, south: 18.265, north: 18.345 };
+var CELLS   = 1000;
+var CELL_LNG = (BOUNDS.east - BOUNDS.west)  / CELLS;
+var CELL_LAT = (BOUNDS.north - BOUNDS.south) / CELLS;
+
+function snapToGrid(lat, lng) {
+  var col = Math.max(0, Math.min(CELLS, Math.round((lng - BOUNDS.west)  / CELL_LNG)));
+  var row = Math.max(0, Math.min(CELLS, Math.round((BOUNDS.north - lat) / CELL_LAT)));
+  return { lat: BOUNDS.north - row * CELL_LAT, lng: BOUNDS.west + col * CELL_LNG };
+}
+
+function haversine(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+          Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function fmtDist(m) { return m >= 1000 ? (m/1000).toFixed(1)+' km' : Math.round(m)+' m'; }
+function fmtTime(s) { var m=Math.round(s/60); return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m'; }
+
+function turnIcon(type, mod) {
+  var t = ((type||'')+' '+(mod||'')).toLowerCase();
+  if (t.includes('depart'))      return '🚀';
+  if (t.includes('arrive'))      return '📍';
+  if (t.includes('roundabout'))  return '🔄';
+  if (t.includes('sharp left'))  return '↰';
+  if (t.includes('left'))        return '⬅️';
+  if (t.includes('sharp right')) return '↱';
+  if (t.includes('right'))       return '➡️';
+  return '⬆️';
+}
+
+function showToast(msg, ms) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, ms||2500);
+}
+
+function htmlDecode(str) {
+  var tx = document.createElement('textarea');
+  tx.innerHTML = str || ''; return tx.value;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MAP INIT — called after welcome dismissed
+══════════════════════════════════════════════════════════════════ */
+function initMapAndData() {
+  map = L.map('map', { zoomControl: false }).setView([18.310, -65.302], 13);
+
+  /* Satellite tiles */
+  L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 19, attribution: '&copy; Esri' }
+  ).addTo(map);
+
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+  /* Home control */
+  var HomeBtn = L.Control.extend({
+    options: { position: 'topleft' },
+    onAdd: function() {
+      var c = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+      c.innerHTML = '<button title="Re-center">🏠</button>';
+      L.DomEvent.on(c, 'click', function(){ map.flyTo([18.310,-65.302],13); });
+      L.DomEvent.disableClickPropagation(c);
+      return c;
     }
+  });
 
-    // Button behavior
-    btn.addEventListener('click', () => {
-      // Hide welcome, show map
-      welcomeEl.style.display = 'none';
-      mapEl.style.display = 'block';
-      btn.setAttribute('aria-expanded', 'true');
+  /* Cluster group */
+  clusterGroup = L.markerClusterGroup({
+    disableClusteringAtZoom: 14,
+    maxClusterRadius: 60,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    iconCreateFunction: function(cluster) {
+      var cnt = cluster.getChildCount();
+      return L.divIcon({
+        html: '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#006994,#00a0b0);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;">' + cnt + '</div>',
+        className: '', iconSize: [38,38], iconAnchor: [19,19]
+      });
+    }
+  });
+  map.addLayer(clusterGroup);
 
-      // Persist preference
-      localStorage.setItem(STORAGE_KEY, 'yes');
+  /* Geolocation watcher */
+  if ('geolocation' in navigator) {
+    watchId = navigator.geolocation.watchPosition(function(pos) {
+      userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+      var ll = [userLat, userLng];
+      if (!userMarker) {
+        userMarker = L.marker(ll, {
+          icon: L.divIcon({ className:'user-dot', iconSize:[14,14], iconAnchor:[7,7] }),
+          zIndexOffset: 1000, interactive: false
+        }).addTo(map);
+      } else { userMarker.setLatLng(ll); }
+      var acc = pos.coords.accuracy;
+      if (!userAccCircle) {
+        userAccCircle = L.circle(ll, { radius:acc, color:'#2f80ff', fillColor:'#2f80ff', fillOpacity:0.07, weight:1, opacity:0.35, interactive:false }).addTo(map);
+      } else { userAccCircle.setLatLng(ll).setRadius(acc); }
+    }, function(err){ console.warn('Geo:', err.message); }, { enableHighAccuracy:true, maximumAge:4000, timeout:10000 });
+  }
 
-      // Initialize map & load data
-      initMapAndData();
+  /* Resize fix */
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(function(){ map.invalidateSize(); }).observe(document.getElementById('map'));
+  } else { setTimeout(function(){ map.invalidateSize(); }, 300); }
+
+  /* Load data.json */
+  loadLocations();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LOAD data.json & BUILD MARKERS
+══════════════════════════════════════════════════════════════════ */
+async function loadLocations() {
+  var url = 'data.json?ts=' + Date.now();
+  try {
+    var res  = await fetch(url, { cache: 'no-store' });
+    var raw  = await res.text();
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = JSON.parse(raw);
+    if (!data.locations || !Array.isArray(data.locations)) throw new Error('Invalid JSON shape');
+
+    data.locations.forEach(function(loc, idx) {
+      var { lat, lng, name, description } = loc;
+      if (typeof lat !== 'number' || typeof lng !== 'number') return;
+
+      /* Auto-detect category — user can later add explicit "category" field to data.json */
+      var type = loc.category || guessCategory(name);
+
+      /* Skip hotels (hidden per your choice) */
+      if (type === 'hotel') return;
+
+      var icon    = makePinIcon(type);
+      var color   = CAT_COLORS[type] || '#555';
+      var catName = CAT_NAMES[type]  || type;
+      var desc    = htmlDecode(description || '');
+
+      var popupHtml =
+        '<div class="popup-body">' +
+          '<div class="popup-title">' + (name||'Unnamed') + '</div>' +
+          '<div class="popup-type-row">' +
+            '<span class="popup-type-tag" style="background:' + color + '22;color:' + color + '">' + catName + '</span>' +
+          '</div>' +
+          '<div class="dist-badge" id="distbadge-' + idx + '">📍 calculating…</div>' +
+          '<div class="popup-desc">' + desc + '</div>' +
+          '<button class="btn-directions">Get Directions</button>' +
+          '<div class="route-status"></div>' +
+          '<div class="fallback-row">' +
+            '<a class="btn-fallback btn-apple"  href="#" target="_blank">🍎 Apple Maps</a>' +
+            '<a class="btn-fallback btn-google" href="#" target="_blank">🗺️ Google Maps</a>' +
+          '</div>' +
+          '<button class="btn-share" data-name="' + (name||'').replace(/"/g,'&quot;') + '">🔗 Share Location</button>' +
+        '</div>';
+
+      var marker = L.marker([lat, lng], { icon: icon }).bindPopup(popupHtml, { maxWidth:310, minWidth:250 });
+      var locData = { lat:lat, lng:lng, name:name, type:type, idx:idx };
+      allLocations.push(locData);
+      markerObjects.push({ marker:marker, type:type });
+
+      marker.on('popupopen', function(e) {
+        document.getElementById('cat-bar').classList.add('hidden');
+        var el          = e.popup.getElement();
+        var dirBtn      = el.querySelector('.btn-directions');
+        var statusEl    = el.querySelector('.route-status');
+        var fallbackEl  = el.querySelector('.fallback-row');
+        var distEl      = el.querySelector('.dist-badge');
+        var shareBtn    = el.querySelector('.btn-share');
+
+        statusEl.textContent = ''; statusEl.className = 'route-status';
+        fallbackEl.classList.remove('visible');
+
+        if (distEl) {
+          distEl.textContent = userLat !== null ? '📍 ' + fmtDist(haversine(userLat,userLng,lat,lng)) + ' away' : '📍 Enable location for distance';
+        }
+
+        if (shareBtn) {
+          shareBtn.onclick = function(){ shareLocation(name, lat, lng, shareBtn); };
+        }
+
+        var freshBtn = dirBtn.cloneNode(true);
+        freshBtn.disabled = false; freshBtn.textContent = 'Get Directions';
+        dirBtn.parentNode.replaceChild(freshBtn, dirBtn);
+        freshBtn.addEventListener('click', function(){ requestRoute(name, lat, lng, statusEl, fallbackEl, freshBtn); });
+      });
+
+      marker.on('popupclose', function(){ document.getElementById('cat-bar').classList.remove('hidden'); });
+
+      clusterGroup.addLayer(marker);
     });
 
-    // --- Map & data initialization (called only when map is shown) ---
-    function initMapAndData() {
-      // Map setup
-      const map = L.map('map').setView([18.3035, -65.2998], 15);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 20,
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-
-      // Emoji marker helpers
-      function makeEmojiIcon(emoji) {
-        return L.divIcon({
-          className: "",
-          html: `<div class="emoji-marker">${emoji}</div>`,
-          iconSize: [40, 40],
-          iconAnchor: [20, 20],
-          popupAnchor: [0, -20]
-        });
-      }
-
-      function chooseEmoji(name = '') {
-        const lower = name.toLowerCase();
-        if (lower.includes("tacos")) return "🌮";
-        if (lower.includes("beach")) return "⛱️+🤿";
-        if (lower.includes("pizza")) return "🍕";
-        if (lower.includes("playa")) return "⛱️";
-        if (lower.includes("hub") || lower.includes("todo culebra")) return "🌴";
-        return "📍";
-      }
-
-      // Unescape HTML entities like &lt; &gt; in description strings
-      function htmlDecode(str = '') {
-        const txt = document.createElement('textarea');
-        txt.innerHTML = str;
-        return txt.value;
-      }
-
-      // Load external JSON (unchanged path; adjust if needed)
-      (async function loadLocations() {
-        const url = 'data.json?ts=' + Date.now(); // cache-bust but do not alter JSON content
-
-        try {
-          const res = await fetch(url, { cache: 'no-store' });
-
-          // Debug info to console
-          console.log('Fetch URL:', url);
-          console.log('HTTP status:', res.status);
-          console.log('Content-Type:', res.headers.get('content-type'));
-
-          const raw = await res.text();
-          console.log('Response preview:', raw.slice(0, 200));
-
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status} on ${url}\n${raw}`);
-          }
-
-          // Parse JSON (even if server sent text/plain)
-          let data;
-          try {
-            data = JSON.parse(raw);
-          } catch (e) {
-            throw new Error('JSON parse error. The response is not valid JSON.\n' + e.message);
-          }
-
-          if (!data.locations || !Array.isArray(data.locations)) {
-            throw new Error('Invalid JSON: expected an object with a "locations" array.');
-          }
-
-          const markers = [];
-
-          data.locations.forEach(loc => {
-            const { lat, lng, name, description } = loc;
-            if (typeof lat !== 'number' || typeof lng !== 'number') {
-              console.warn('Skipping location with invalid lat/lng:', loc);
-              return;
-            }
-
-            const icon = makeEmojiIcon(chooseEmoji(name));
-            const marker = L.marker([lat, lng], { icon }).addTo(map);
-
-            // Decode entities so links like &lt;a href=...&gt; render correctly
-            const decodedDesc = htmlDecode(description);
-
-            marker.bindPopup(`
-              <b>${name ?? 'Unnamed'}</b><br />
-              ${decodedDesc ?? ''}
-            `);
-
-            markers.push(marker);
-          });
-
-          if (markers.length) {
-            const bounds = L.latLngBounds(markers.map(m => m.getLatLng()));
-            map.fitBounds(bounds, { padding: [30, 30] });
-          } else {
-            console.warn('No markers created from data.json');
-          }
-        } catch (err) {
-          console.error('Error loading locations:', err);
-          alert('There was a problem loading the locations. Open DevTools → Console for details.');
-        }
-      })();
+    /* Fit bounds to all markers */
+    if (markerObjects.length) {
+      var pts = markerObjects.map(function(m){ return m.marker.getLatLng(); });
+      map.fitBounds(L.latLngBounds(pts), { padding:[30,30] });
     }
-  </script>
+  } catch(err) {
+    console.error('Error loading data.json:', err);
+    showToast('⚠️ Could not load location data');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   FILTER
+══════════════════════════════════════════════════════════════════ */
+function filterMarkers(type) {
+  if (activeFilter === type || type === null) { resetFilter(); return; }
+  activeFilter = type;
+  document.querySelectorAll('.cat-pill').forEach(function(b){ b.classList.remove('active'); });
+  var pill = document.getElementById('pill-' + (type||'all'));
+  if (pill) pill.classList.add('active');
+  markerObjects.forEach(function(m){
+    if (m.type === type) { if (!clusterGroup.hasLayer(m.marker)) clusterGroup.addLayer(m.marker); }
+    else                 { if (clusterGroup.hasLayer(m.marker))  clusterGroup.removeLayer(m.marker); }
+  });
+  map.closePopup();
+}
+
+function resetFilter() {
+  activeFilter = null;
+  document.querySelectorAll('.cat-pill').forEach(function(b){ b.classList.remove('active'); });
+  var p = document.getElementById('pill-all'); if (p) p.classList.add('active');
+  markerObjects.forEach(function(m){ if (!clusterGroup.hasLayer(m.marker)) clusterGroup.addLayer(m.marker); });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════════════════════════════ */
+function liveSearch(val) {
+  var resultsEl = document.getElementById('search-results');
+  var clearBtn  = document.getElementById('search-clear');
+  val = val.trim().toLowerCase();
+  if (clearBtn) clearBtn.classList.toggle('visible', val.length > 0);
+  if (!val) { resultsEl.style.display='none'; resultsEl.innerHTML=''; return; }
+
+  var matches = allLocations.filter(function(l){ return l.name.toLowerCase().includes(val) || (CAT_NAMES[l.type]||'').toLowerCase().includes(val); });
+
+  resultsEl.innerHTML = '';
+  if (!matches.length) {
+    resultsEl.innerHTML = '<div class="search-result-item" style="color:#999;font-size:13px;">No results found</div>';
+  } else {
+    matches.slice(0,8).forEach(function(m) {
+      var div = document.createElement('div');
+      div.className = 'search-result-item';
+      div.innerHTML = '<span class="sri-icon">' + (CAT_EMOJI[m.type]||'📍') + '</span>' +
+        '<span class="sri-text"><div class="sri-name">' + m.name + '</div>' +
+        '<div class="sri-type">' + (CAT_NAMES[m.type]||m.type) + '</div></span>';
+      div.onclick = function() {
+        map.setView([m.lat, m.lng], 15);
+        var mo = markerObjects[m.idx];
+        if (mo && !clusterGroup.hasLayer(mo.marker)) clusterGroup.addLayer(mo.marker);
+        if (mo) mo.marker.openPopup();
+        resultsEl.style.display = 'none';
+        document.getElementById('search-input').value = m.name;
+      };
+      resultsEl.appendChild(div);
+    });
+  }
+  resultsEl.style.display = 'block';
+}
+
+function doSearch() {
+  var val = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!val) return;
+  var m = allLocations.find(function(l){ return l.name.toLowerCase().includes(val); });
+  if (m) { map.setView([m.lat,m.lng],15); var mo=markerObjects[m.idx]; if(mo){if(!clusterGroup.hasLayer(mo.marker))clusterGroup.addLayer(mo.marker);mo.marker.openPopup();} document.getElementById('search-results').style.display='none'; }
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('search-results').innerHTML = '';
+  var cb = document.getElementById('search-clear'); if (cb) cb.classList.remove('visible');
+}
+
+document.addEventListener('click', function(e) {
+  var tb = document.getElementById('topbar');
+  if (tb && !tb.contains(e.target)) document.getElementById('search-results').style.display = 'none';
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   LOCATE ME
+══════════════════════════════════════════════════════════════════ */
+function locateMe() {
+  var btn = document.getElementById('btn-locate');
+  if (userLat !== null) { map.flyTo([userLat,userLng],16,{animate:true,duration:1.2}); return; }
+  btn.classList.add('locating'); btn.textContent = '⏳';
+  navigator.geolocation && navigator.geolocation.getCurrentPosition(function(pos){
+    userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+    map.flyTo([userLat,userLng],16,{animate:true,duration:1.2});
+    btn.classList.remove('locating'); btn.textContent = '📍';
+  }, function(){
+    btn.classList.remove('locating'); btn.textContent = '📍';
+    showToast('Location access denied');
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ROUTING
+══════════════════════════════════════════════════════════════════ */
+function clearRoute() {
+  if (activeRoute) { try { map.removeControl(activeRoute); } catch(e){} activeRoute = null; }
+  document.getElementById('turn-panel').classList.remove('open');
+}
+
+function requestRoute(destName, destLat, destLng, statusEl, fallbackEl, btnEl) {
+  if (userLat === null) {
+    statusEl.textContent = 'Location not available — allow location access.';
+    statusEl.className = 'route-status error'; return;
+  }
+  var snapped = snapToGrid(userLat, userLng);
+  clearRoute();
+  btnEl.disabled = true; btnEl.textContent = 'Finding route…';
+  statusEl.textContent = ''; statusEl.className = 'route-status';
+  fallbackEl.classList.remove('visible');
+
+  activeRoute = L.Routing.control({
+    waypoints: [L.latLng(snapped.lat,snapped.lng), L.latLng(destLat,destLng)],
+    routeWhileDragging:false, show:false, addWaypoints:false, draggableWaypoints:false,
+    createMarker: function(){ return null; },
+    lineOptions: {
+      styles: [{color:'#ffffff',weight:9,opacity:0.35},{color:'#007AFF',weight:5,opacity:1.0}],
+      extendToWaypoints:true, missingRouteTolerance:0
+    },
+    router: L.Routing.osrmv1({ serviceUrl:'https://router.project-osrm.org/route/v1', profile:'driving', timeout:12000 })
+  }).addTo(map);
+
+  activeRoute.on('routesfound', function(e) {
+    var route = e.routes[0];
+    btnEl.disabled=false; btnEl.textContent='↑ View turn-by-turn';
+    statusEl.textContent = fmtDist(route.summary.totalDistance) + ' · ' + fmtTime(route.summary.totalTime);
+    document.getElementById('turn-title').textContent = '→ ' + destName;
+    document.getElementById('turn-meta').textContent  = statusEl.textContent;
+    var stepsEl = document.getElementById('turn-steps'); stepsEl.innerHTML='';
+    (route.instructions||[]).forEach(function(step){
+      var row=document.createElement('div'); row.className='turn-step';
+      row.innerHTML='<div class="turn-icon">'+turnIcon(step.type,step.modifier)+'</div>' +
+        '<div><div>'+(step.text||'')+'</div>'+(step.distance>0?'<div class="turn-dist">'+fmtDist(step.distance)+'</div>':'')+'</div>';
+      stepsEl.appendChild(row);
+    });
+    document.getElementById('turn-panel').classList.add('open');
+    map.closePopup(); map.fitBounds(route.bounds,{padding:[30,30]});
+  });
+
+  activeRoute.on('routingerror', function() {
+    try{map.removeControl(activeRoute);}catch(e){} activeRoute=null;
+    btnEl.disabled=false; btnEl.textContent='Get Directions';
+    statusEl.textContent='⚠️ No route found. Try:'; statusEl.className='route-status error';
+    fallbackEl.querySelector('.btn-apple').href='maps://maps.apple.com/?saddr='+userLat+','+userLng+'&daddr='+destLat+','+destLng+'&dirflg=d';
+    fallbackEl.querySelector('.btn-google').href='https://www.google.com/maps/dir/?api=1&origin='+userLat+','+userLng+'&destination='+destLat+','+destLng+'&travelmode=driving';
+    fallbackEl.classList.add('visible');
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARE LOCATION
+══════════════════════════════════════════════════════════════════ */
+function shareLocation(name, lat, lng, btn) {
+  var url = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
+  if (navigator.share) {
+    navigator.share({ title:name, text:'Check out '+name+' on Culebra!', url:url }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(name+' — '+url).then(function(){
+      btn.textContent='✅ Copied!'; btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent='🔗 Share Location'; btn.classList.remove('copied'); },2000);
+    });
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TAP RIPPLE
+══════════════════════════════════════════════════════════════════ */
+function spawnRipple(x,y) {
+  var el=document.createElement('div'); el.className='tap-ripple';
+  el.style.cssText='left:'+(x-30)+'px;top:'+(y-30)+'px;width:60px;height:60px;';
+  document.body.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},700);
+}
+document.addEventListener('touchstart',function(e){ if(e.touches.length===1) spawnRipple(e.touches[0].clientX,e.touches[0].clientY); },{passive:true});
+
+/* ══════════════════════════════════════════════════════════════════
+   EASTER EGG 1: OCEAN DEPTHS
+   Mobile: 5 fast taps | Desktop: type "ocean"
+══════════════════════════════════════════════════════════════════ */
+(function(){
+  var tapCount=0,tapTimer=null,typedKeys='';
+
+  function startOceanAnimation(){
+    var canvas=document.getElementById('ee-canvas'),ctx=canvas.getContext('2d'),fishes=[],bubbles=[],raf;
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+    resize(); window.addEventListener('resize',resize);
+    for(var i=0;i<18;i++) fishes.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*1.4,vy:(Math.random()-0.5)*0.6,size:8+Math.random()*20,hue:160+Math.random()*80,glow:0.3+Math.random()*0.7,phase:Math.random()*Math.PI*2});
+    for(var j=0;j<30;j++) bubbles.push({x:Math.random()*canvas.width,y:canvas.height+Math.random()*200,r:2+Math.random()*6,vy:0.4+Math.random()*0.8,alpha:0.2+Math.random()*0.5});
+    function drawFish(f,t){ctx.save();ctx.translate(f.x,f.y);if(f.vx<0)ctx.scale(-1,1);var w=Math.sin(t*0.002+f.phase)*3;ctx.rotate(w*0.05);var g=Math.sin(t*0.003+f.phase)*0.4+0.6;ctx.shadowColor='hsl('+f.hue+',100%,60%)';ctx.shadowBlur=18;ctx.fillStyle='hsla('+f.hue+',90%,65%,'+(f.glow*g)+')';ctx.beginPath();ctx.ellipse(0,0,f.size,f.size*0.45,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(-f.size,0);ctx.lineTo(-f.size-f.size*0.7,-f.size*0.4);ctx.lineTo(-f.size-f.size*0.7,f.size*0.4);ctx.closePath();ctx.fill();ctx.fillStyle='rgba(255,255,255,0.9)';ctx.beginPath();ctx.arc(f.size*0.55,-f.size*0.1,f.size*0.12,0,Math.PI*2);ctx.fill();ctx.restore();}
+    function animate(t){raf=requestAnimationFrame(animate);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='rgba(0,180,255,0.03)';for(var si=0;si<80;si++){var sx=(si*137.5)%canvas.width,sy=(si*89.3+t*0.01)%canvas.height;ctx.beginPath();ctx.arc(sx,sy,1,0,Math.PI*2);ctx.fill();}for(var fi=0;fi<fishes.length;fi++){var f=fishes[fi];f.x+=f.vx;f.y+=f.vy+Math.sin(t*0.001+f.phase)*0.3;if(f.x>canvas.width+60)f.x=-60;if(f.x<-60)f.x=canvas.width+60;if(f.y>canvas.height+40)f.y=-40;if(f.y<-40)f.y=canvas.height+40;drawFish(f,t);}for(var bi=0;bi<bubbles.length;bi++){var b=bubbles[bi];b.y-=b.vy;b.x+=Math.sin(t*0.002+bi)*0.4;if(b.y<-20){b.y=canvas.height+20;b.x=Math.random()*canvas.width;}ctx.strokeStyle='rgba(100,220,255,'+b.alpha+')';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.stroke();}}
+    raf=requestAnimationFrame(animate);
+    canvas._stopAnim=function(){cancelAnimationFrame(raf);window.removeEventListener('resize',resize);};
+  }
+
+  window.openOceanEE=function(){document.getElementById('ee-overlay').classList.add('show');startOceanAnimation();showToast('🌊 You found the ocean depths!');};
+  window.closeOceanEE=function(){document.getElementById('ee-overlay').classList.remove('show');var c=document.getElementById('ee-canvas');if(c&&c._stopAnim)c._stopAnim();};
+
+  document.addEventListener('touchstart',function(e){
+    if(e.target.closest('button,a,input,.cat-pill,.leaflet-container')) return;
+    tapCount++; if(tapTimer)clearTimeout(tapTimer);
+    tapTimer=setTimeout(function(){tapCount=0;},2000);
+    if(tapCount>=5){tapCount=0;clearTimeout(tapTimer);openOceanEE();var t=e.touches[0];spawnRipple(t.clientX,t.clientY);}
+  },{passive:true});
+
+  document.addEventListener('keypress',function(e){
+    if(document.activeElement&&(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA'))return;
+    typedKeys=(typedKeys+e.key).slice(-5).toLowerCase();
+    if(typedKeys==='ocean'){openOceanEE();typedKeys='';}
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   EASTER EGG 2: TURTLE PARADE
+   Mobile: long-press 1.5s | Desktop: type "turtle"
+══════════════════════════════════════════════════════════════════ */
+(function(){
+  var ltTimer=null,turtleTyped='',turtlesActive=false,turtleEls=[];
+  function spawnTurtleParade(){
+    if(turtlesActive){clearTurtles();return;}
+    turtlesActive=true; showToast('🐢 Turtle parade! Tap anywhere to stop.');
+    for(var i=0;i<8;i++){(function(idx){setTimeout(function(){var el=document.createElement('div');el.style.cssText='position:fixed;z-index:9990;font-size:'+(28+Math.random()*20)+'px;top:'+(10+Math.random()*80)+'vh;left:-60px;pointer-events:none;transition:left 6s linear;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3))';el.textContent='🐢';document.body.appendChild(el);turtleEls.push(el);setTimeout(function(){el.style.left=(window.innerWidth+80)+'px';},50);setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);turtleEls=turtleEls.filter(function(t){return t!==el;});if(turtleEls.length===0)turtlesActive=false;},6500);},idx*600);})(i);}
+  }
+  function clearTurtles(){turtleEls.forEach(function(el){if(el.parentNode)el.parentNode.removeChild(el);});turtleEls=[];turtlesActive=false;}
+  var mapEl=document.getElementById('map-wrap');
+  mapEl.addEventListener('touchstart',function(){ltTimer=setTimeout(spawnTurtleParade,1500);},{passive:true});
+  mapEl.addEventListener('touchend',function(){clearTimeout(ltTimer);},{passive:true});
+  mapEl.addEventListener('touchmove',function(){clearTimeout(ltTimer);},{passive:true});
+  document.addEventListener('keypress',function(e){if(document.activeElement&&(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA'))return;turtleTyped=(turtleTyped+e.key).slice(-6).toLowerCase();if(turtleTyped==='turtle'){spawnTurtleParade();turtleTyped='';}});
+  document.addEventListener('click',function(e){if(turtlesActive&&!e.target.closest('button,a,input,.leaflet-control'))clearTurtles();});
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   EASTER EGG 3: PARTY MODE (FIESTA)
+   Mobile: shake 3x | Desktop: type "fiesta"
+══════════════════════════════════════════════════════════════════ */
+(function(){
+  var partyTyped='',partyActive=false,lastShake=0,shakeCount=0,lastAcc=null;
+  var partyEmojis=['🎉','🌊','🐠','🦀','🌴','☀️','🎶','🍹','🦈','🐢','⚓','🐚','🦭'];
+  var styleEl=document.createElement('style');
+  styleEl.textContent='@keyframes confettiFall{to{top:110vh;transform:rotate(360deg) translateX(60px);opacity:0;}}';
+  document.head.appendChild(styleEl);
+  function launchParty(){
+    if(partyActive)return; partyActive=true; showToast('🎉 ¡Fiesta en Culebra!',3000);
+    var launched=0,interval=setInterval(function(){
+      if(launched>=60){clearInterval(interval);setTimeout(function(){partyActive=false;},500);return;}
+      var el=document.createElement('div'),emoji=partyEmojis[Math.floor(Math.random()*partyEmojis.length)],startX=Math.random()*window.innerWidth,size=20+Math.random()*24,dur=2.5+Math.random()*2;
+      el.style.cssText='position:fixed;z-index:9995;left:'+startX+'px;top:-40px;font-size:'+size+'px;pointer-events:none;animation:confettiFall '+dur+'s ease-in forwards';
+      el.textContent=emoji; document.body.appendChild(el);
+      setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},dur*1000+100);
+      launched++;
+    },80);
+  }
+  if(window.DeviceMotionEvent){window.addEventListener('devicemotion',function(e){var acc=e.accelerationIncludingGravity;if(!acc)return;if(lastAcc){var delta=Math.abs(acc.x-lastAcc.x)+Math.abs(acc.y-lastAcc.y)+Math.abs(acc.z-lastAcc.z),now=Date.now();if(delta>25&&now-lastShake>400){lastShake=now;shakeCount++;if(shakeCount>=3){shakeCount=0;launchParty();}}if(now-lastShake>2000)shakeCount=0;}lastAcc={x:acc.x,y:acc.y,z:acc.z};},{passive:true});}
+  document.addEventListener('keypress',function(e){if(document.activeElement&&(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA'))return;partyTyped=(partyTyped+e.key).slice(-6).toLowerCase();if(partyTyped==='fiesta'){launchParty();partyTyped='';}});
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   EASTER EGG 4: SHARK CURSOR
+   Desktop: Ctrl+Shift+H then Ctrl+Shift+L | Backspace to cancel
+══════════════════════════════════════════════════════════════════ */
+(function(){
+  var sharkSVG='<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><ellipse cx="22" cy="26" rx="18" ry="9" fill="#4a9aba" opacity="0.95"/><polygon points="4,26 0,16 8,26 0,36" fill="#357a96"/><polygon points="20,17 26,8 30,17" fill="#357a96"/><ellipse cx="24" cy="29" rx="12" ry="5" fill="#d0eaf5" opacity="0.8"/><circle cx="35" cy="24" r="2.2" fill="#1a1a2e"/><circle cx="35.8" cy="23.2" r="0.7" fill="#fff"/><path d="M37,27 Q40,30 37,31" stroke="#1a1a2e" stroke-width="1.2" fill="none"/></svg>';
+  var sharkCursor='url("data:image/svg+xml,'+encodeURIComponent(sharkSVG)+'") 8 24, auto';
+  var sharkActive=false,hPressed=false;
+  function activateShark(){sharkActive=true;document.body.style.cursor=sharkCursor;var m=document.getElementById('map');if(m)m.style.cursor=sharkCursor;}
+  function deactivateShark(){sharkActive=false;document.body.style.cursor='';var m=document.getElementById('map');if(m)m.style.cursor='';}
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Backspace'&&sharkActive){deactivateShark();return;}
+    if(e.ctrlKey&&e.shiftKey&&(e.key==='H'||e.key==='h')){hPressed=true;return;}
+    if(e.ctrlKey&&e.shiftKey&&(e.key==='L'||e.key==='l')&&hPressed){hPressed=false;activateShark();return;}
+    if(!e.ctrlKey||!e.shiftKey)hPressed=false;
+  });
+  document.addEventListener('keyup',function(e){if(e.key==='Control'||e.key==='Shift')hPressed=false;});
+})();
+</script>
 </body>
 </html>
-
-
-
-
 
