@@ -171,16 +171,6 @@
       "grid_row": 29
     },
     {
-      "name": "787 Coffee",
-      "category": "food",
-      "lat": 18.4322127,
-      "lng": -66.0999584,
-      "description": "☕ ☕ ☕<br><br>Puerto Rico's finest specialty coffee, grown in the mountains of Jayuya. Bold, smooth, and island-roasted. A must for any coffee lover visiting the island. <a href='https://www.shopculebra.com' target='_blank'>Order at ShopCulebra.com</a>",
-      "cell": "N/A",
-      "grid_col": null,
-      "grid_row": null
-    },
-    {
       "name": "Kokomo Hotel",
       "category": "hotel",
       "lat": 18.2905,
