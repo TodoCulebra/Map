@@ -23,12 +23,12 @@
     {
       "name": "Hector El Protector",
       "category": "hub",
-      "lat": 18.3007,
-      "lng": -65.3008,
+      "lat": 18.300700,
+      "lng": -65.302202,
       "description": "Culebra's beloved guardian troll, hand-carved from a fallen tree by Danish artist Thomas Dambo in 2014. Destroyed by Hurricane Maria in 2017 and lovingly rebuilt by the local community. Hector watches over the island and everyone on it. Stop by, say hello, and snap a photo — he loves the attention. 🧌",
-      "cell": "Y30",
-      "grid_col": "Y",
-      "grid_row": 30
+      "cell": "L31-M31",
+      "grid_col": "L-M",
+      "grid_row": 31
     },
     {
       "name": "Zaco's Tacos Restaurant",
