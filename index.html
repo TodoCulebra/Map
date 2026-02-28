@@ -1,1 +1,13 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Jellyfish Easter Egg</title>\n    <style>\n        body { cursor: url('jellyfish.svg'),auto; }  // Assign jellyfish SVG cursor\n        .ink { position: absolute; border-radius: 50%; background: rgba(0, 0, 0, 0.6); animation: ink-effect 1s linear; }\n        @keyframes ink-effect {\n            0% { transform: scale(1); opacity: 1; }\n            100% { transform: scale(5); opacity: 0; }\n        }\n    </style>\n</head>\n<body>\n    <script>\n        document.addEventListener('keydown', function (e) {\n            if (e.ctrlKey && e.shiftKey && e.key === 'H') {\n                document.body.style.cursor = "url('jellyfish.svg'),auto";\n                createInkEffect();  // Call this function to create ink effects\n            } else if (e.ctrlKey && e.shiftKey && e.key === 'L') {\n                document.body.style.cursor = 'auto';\n            }\n        });\n        function createInkEffect() {\n            const ink = document.createElement('div');\n            ink.classList.add('ink');\n            ink.style.width = '20px';\n            ink.style.height = '20px';\n            ink.style.left = `${Math.random() * window.innerWidth}px`;\n            ink.style.top = `${Math.random() * window.innerHeight}px`;\n            document.body.appendChild(ink);\n            setTimeout(() => { ink.remove(); }, 1000);\n        }\n    <\/script>\n</body>\n</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Culebra</title>
+</head>
+<body>
+    <h1>Welcome to Todo Culebra</h1>
+    <p>Your todos will be listed here...</p>
+</body>
+</html>
