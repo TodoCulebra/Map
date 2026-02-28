@@ -190,5 +190,22 @@
       "grid_col": "Y",
       "grid_row": 36
     }
-  ]
+  ],
+  "subgrid": {
+    "north": 18.3024,
+    "south": 18.3007,
+    "west": -65.3041,
+    "east": -65.3008,
+    "rows": 30,
+    "cols": 20,
+    "cell_height_m": 6.29,
+    "cell_width_m": 17.33,
+    "parent_cells": [
+      "X29",
+      "Y29",
+      "X30",
+      "Y30"
+    ],
+    "note": "High-resolution 20x30 sub-grid covering the Dewey town center block"
+  }
 }
