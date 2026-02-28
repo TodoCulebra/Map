@@ -24,7 +24,7 @@
       "name": "Hector El Protector",
       "category": "hub",
       "lat": 18.300700,
-      "lng": -65.302202,
+      "lng": -65.297005,
       "description": "Culebra's beloved guardian troll, hand-carved from a fallen tree by Danish artist Thomas Dambo in 2014. Destroyed by Hurricane Maria in 2017 and lovingly rebuilt by the local community. Hector watches over the island and everyone on it. Stop by, say hello, and snap a photo — he loves the attention. 🧌",
       "cell": "L31-M31",
       "grid_col": "L-M",
@@ -171,6 +171,16 @@
       "grid_row": 29
     },
     {
+      "name": "787 Coffee",
+      "category": "food",
+      "lat": 18.4322127,
+      "lng": -66.0999584,
+      "description": "☕ ☕ ☕<br><br>Puerto Rico's finest specialty coffee, grown in the mountains of Jayuya. Bold, smooth, and island-roasted. A must for any coffee lover visiting the island. <a href='https://www.shopculebra.com' target='_blank'>Order at ShopCulebra.com</a>",
+      "cell": "N/A",
+      "grid_col": null,
+      "grid_row": null
+    },
+    {
       "name": "Kokomo Hotel",
       "category": "hotel",
       "lat": 18.2905,
@@ -182,20 +192,20 @@
     }
   ],
   "subgrid": {
-    "north": 18.3024,
-    "south": 18.3007,
-    "west": -65.3041,
-    "east": -65.3008,
+    "north": 18.304100,
+    "south": 18.300700,
+    "west": -65.300800,
+    "east": -65.294200,
     "rows": 30,
     "cols": 20,
-    "cell_height_m": 6.29,
-    "cell_width_m": 17.33,
+    "cell_height_m": 12.62,
+    "cell_width_m": 34.88,
     "parent_cells": [
-      "X29",
+      "Y28",
+      "Z28",
       "Y29",
-      "X30",
-      "Y30"
+      "Z29"
     ],
-    "note": "High-resolution 20x30 sub-grid covering the Dewey town center block"
+    "note": "High-resolution 20x30 sub-grid covering the Dewey town center block, anchored to main grid cells Y28/Z28/Y29/Z29"
   }
 }
