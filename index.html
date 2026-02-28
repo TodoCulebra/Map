@@ -1088,6 +1088,70 @@ function drawGrid() {
   gridLines.push(box);
   box.addTo(map);
 
+  /* ── SUB-GRID: 20×30 matrix inside X29/Y29/X30/Y30 (Dewey town center) ── */
+  var SG = {
+    north:  18.3024,
+    south:  18.3007,
+    west:  -65.3041,
+    east:  -65.3008,
+    rows:   30,
+    cols:   20
+  };
+  SG.cellLat = (SG.north - SG.south) / SG.rows;
+  SG.cellLng = (SG.east  - SG.west)  / SG.cols;
+
+  /* Always draw the sub-grid bounding box */
+  var sgBoxOpts = { color:'rgba(255,210,60,0.95)', weight:2, interactive:false, dashArray:'4,3' };
+  var sgBox = L.rectangle([[SG.south, SG.west],[SG.north, SG.east]], sgBoxOpts);
+  gridLines.push(sgBox);
+  sgBox.addTo(map);
+
+  /* Draw sub-grid lines only when zoomed in enough to be useful */
+  if (zoom >= 15) {
+    var sgLineOpts = { color:'rgba(255,210,60,0.4)', weight:0.5, interactive:false };
+
+    /* Horizontal lines */
+    for (var sri = 0; sri <= SG.rows; sri++) {
+      var slat = SG.north - sri * SG.cellLat;
+      var sl = L.polyline([[slat, SG.west],[slat, SG.east]], sgLineOpts);
+      gridLines.push(sl); sl.addTo(map);
+    }
+    /* Vertical lines */
+    for (var sci = 0; sci <= SG.cols; sci++) {
+      var slng = SG.west + sci * SG.cellLng;
+      var svl = L.polyline([[SG.north, slng],[SG.south, slng]], sgLineOpts);
+      gridLines.push(svl); svl.addTo(map);
+
+      /* Sub-cell labels at each intersection */
+      for (var slri = 0; slri <= SG.rows; slri++) {
+        var sllat = SG.north - slri * SG.cellLat;
+        var subAddr = colName(sci) + (slri + 1);
+        var sicon = L.divIcon({
+          html: '<div class="grid-cell-label" style="font-size:7px;padding:1px 3px;background:rgba(60,40,0,0.82);color:#ffd23c;border-color:rgba(255,210,60,0.5);">' + subAddr + '</div>',
+          className: '', iconSize: null, iconAnchor: [0, 0]
+        });
+        var slbl = L.marker([sllat, slng], { icon:sicon, interactive:false, zIndexOffset:-998 });
+        gridLabels.push(slbl); slbl.addTo(map);
+      }
+    }
+  }
+
+  /* Sub-grid corner labels — always show when grid is on */
+  var sgCorners = [
+    { lat:SG.north, lng:SG.west,  label:'X29' },
+    { lat:SG.north, lng:SG.east,  label:'Y29' },
+    { lat:SG.south, lng:SG.west,  label:'X30' },
+    { lat:SG.south, lng:SG.east,  label:'Y30' }
+  ];
+  sgCorners.forEach(function(c) {
+    var sgi = L.divIcon({
+      html: '<div class="grid-cell-label" style="font-size:10px;padding:2px 6px;background:rgba(60,40,0,0.9);color:#ffd23c;border-color:rgba(255,210,60,0.95);">' + c.label + '</div>',
+      className: '', iconSize: null, iconAnchor: [0, 0]
+    });
+    var sgm = L.marker([c.lat, c.lng], { icon:sgi, interactive:false });
+    gridLabels.push(sgm); sgm.addTo(map);
+  });
+
   /* Corner labels always visible */
   var corners = [
     { lat:GRID.north, lng:GRID.west,  label:'A1' },
